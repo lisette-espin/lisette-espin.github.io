@@ -23,7 +23,7 @@
   --rule:#C9CEC6; --rule-strong:#9DA79E;
   /* publication categories */
   --c-journal:#1F7A6E; --c-conference:#3D5A6C; --c-workshop:#5F7A3A;
-  --c-workshop2:#93AC6E; --c-preprint:#8C6D4F; --c-review:#C9922F; --c-prep:#7A4A6B; --c-thesis:#A85A3C;
+  --c-workshop2:#93AC6E; --c-tutorial:#2E6F8E; --c-preprint:#8C6D4F; --c-review:#C9922F; --c-prep:#7A4A6B; --c-thesis:#A85A3C;
   --s1:.4rem; --s2:.8rem; --s3:1.2rem; --s4:2rem; --s5:3.2rem;
   --maxw:1180px;
 }
@@ -123,7 +123,9 @@ select,input[type=search],input[type=number]{font:inherit;font-size:.86rem;backg
   border:1px solid var(--rule-strong);padding:.3rem .5rem;color:var(--ink);border-radius:0}
 input[type=search]{min-width:12rem}
 input[type=checkbox]{width:1rem;height:1rem;accent-color:var(--ink)}
-.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:var(--s2)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-bottom:var(--s2)}
+.chips:empty{display:none}
+.chip-lead{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
 .chip{display:inline-flex;align-items:center;gap:.4rem;background:var(--ink);color:var(--ground);
   font-size:.76rem;padding:.22rem .5rem;border:none;cursor:pointer}
 .chip .x{opacity:.6}
@@ -151,6 +153,13 @@ input[type=checkbox]{width:1rem;height:1rem;accent-color:var(--ink)}
 .paper .au button:hover{color:var(--c-journal);border-bottom-color:var(--c-journal)}
 .paper .ids{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--ink-soft);margin-top:.25rem}
 .paper .cites{text-align:right}
+.paper.version{padding-left:1.9rem;position:relative;padding-top:.45rem;border-bottom-style:dotted}
+.paper.version::before{content:"";position:absolute;left:.55rem;top:-.1rem;
+  width:.85rem;height:1.05rem;border-left:1px solid var(--rule-strong);
+  border-bottom:1px solid var(--rule-strong)}
+.paper.version .t{font-size:.88rem}
+.paper.version .vlabel{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--ink-soft);margin-bottom:.1rem}
 .paper .cites .n{display:block;font-family:"IBM Plex Serif",serif;font-size:1.15rem;line-height:1.1}
 .paper .cites .cl{display:block;font-size:.68rem;color:var(--ink-soft);margin-top:.15rem}
 
@@ -184,19 +193,6 @@ input[type=checkbox]{width:1rem;height:1rem;accent-color:var(--ink)}
 .tool .rel span{display:block;margin-bottom:.15rem}
 .tool .go{font-size:.8rem;align-self:flex-start}
 
-/* DATA PANEL -------------------------------------------------------------- */
-details.data{background:var(--panel);border:1px solid var(--rule);padding:var(--s3)}
-details.data summary{cursor:pointer;font-family:"IBM Plex Serif",serif;font-size:1.1rem}
-details.data p{font-size:.86rem;color:var(--ink-soft);max-width:70ch}
-textarea{width:100%;height:11rem;font-family:"IBM Plex Mono",monospace;font-size:.75rem;
-  border:1px solid var(--rule-strong);background:var(--ground);color:var(--ink);padding:var(--s2)}
-.btn{background:var(--ink);color:var(--ground);border:none;padding:.45rem .9rem;font-size:.85rem;cursor:pointer}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--rule-strong)}
-.btn:hover{background:var(--c-journal);color:#fff}
-.btnrow{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s2)}
-.status{font-size:.82rem;margin-top:var(--s2);min-height:1.2em}
-.status.ok{color:var(--c-journal)}
-.status.err{color:var(--c-thesis)}
 footer{border-top:1px solid var(--rule-strong);padding:var(--s3) 0 var(--s5);
   font-size:.8rem;color:var(--ink-soft);max-width:78ch}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -227,10 +223,11 @@ footer{border-top:1px solid var(--rule-strong);padding:var(--s3) 0 var(--s5);
     <div class="legend" id="legend"></div>
     <div class="controls" style="margin-top:calc(var(--s2) * -1)">
       <label class="check">
-        <input type="checkbox" id="chart-hide-unpub" checked> Published only
+        <input type="checkbox" class="pub-toggle"> Published only
       </label>
       <span class="ed-count" id="chart-scope"></span>
     </div>
+    <div class="chips" data-chips></div>
     <div class="charts">
       <div class="chart" id="wrap-pubs">
         <h3>Papers per year</h3>
@@ -278,33 +275,37 @@ footer{border-top:1px solid var(--rule-strong);padding:var(--s3) 0 var(--s5);
         </select>
       </label>
       <label class="check">
-        <input type="checkbox" id="hide-unpub"> Hide preprints &amp; unpublished
+        <input type="checkbox" class="pub-toggle"> Published only
       </label>
       <label>Find
-        <input type="search" id="search" placeholder="title, author, venue">
+        <input type="search" id="search" placeholder="title, author, venue, year">
       </label>
     </div>
-    <div class="chips" id="chips"></div>
+    <div class="chips" data-chips></div>
     <div id="paper-list"></div>
   </section>
 
   <section id="sec-network">
     <div class="sec-head">
       <h2>Co-authors</h2>
-      <p>Circle size is shared papers, line weight is how often two of them appear together on your work. Click a name to filter.</p>
+      <p>Circle size is shared papers, line weight is how often two of them appear together. Clicking a name filters both this graph and the paper list above.</p>
     </div>
     <div class="controls">
       <label>Layout
         <select id="net-mode">
-          <option value="ego">Include me at the centre</option>
+          <option value="ego" id="opt-ego">Include me at the centre</option>
           <option value="peers">Co-authors only</option>
         </select>
       </label>
       <label>Name those with at least
         <input type="number" id="net-min" min="1" step="1" value="1" style="width:4rem"> papers
       </label>
+      <label class="check">
+        <input type="checkbox" class="pub-toggle"> Published only
+      </label>
       <button class="btn ghost" id="net-reheat">Re-settle</button>
     </div>
+    <div class="chips" data-chips></div>
     <div class="net-wrap">
       <svg id="network"></svg>
       <div class="net-legend" id="net-legend"></div>
@@ -319,23 +320,6 @@ footer{border-top:1px solid var(--rule-strong);padding:var(--s3) 0 var(--s5);
     <div class="tools" id="tool-grid"></div>
   </section>
 
-  <section id="sec-data">
-    <details class="data">
-      <summary>Data — edit, import, export</summary>
-      <p>Everything on this page is driven by the JSON below. Paste a replacement and press
-        “Load JSON” to rebuild, or “Copy current data” to take your edits back out. To make a
-        change permanent, paste the exported JSON over the <code>SEED</code> block in this
-        file's script and re-upload.</p>
-      <textarea id="data-io" spellcheck="false" aria-label="Dashboard data as JSON"></textarea>
-      <div class="btnrow">
-        <button class="btn" id="btn-load">Load JSON</button>
-        <button class="btn ghost" id="btn-export">Copy current data</button>
-        <button class="btn ghost" id="btn-download">Download JSON</button>
-        <button class="btn ghost" id="btn-reset">Reset to built-in</button>
-      </div>
-      <div class="status" id="data-status"></div>
-    </details>
-  </section>
 </main>
 
 <footer class="wrap" id="footer"></footer>
@@ -370,6 +354,7 @@ const SEED = {
       "Journal",
       "Conference",
       "Workshop in proceedings",
+      "Tutorial in proceedings",
       "Workshop",
       "Preprint",
       "Under review",
@@ -923,33 +908,24 @@ const SEED = {
         "F. Karimi"
       ],
       "venue": "The Web Conference (Companion)",
-      "venueType": "Conference",
+      "venueType": "Tutorial in proceedings",
       "topic": "Edge Formation in Networks",
       "affils": [
         "CSH"
       ],
       "url": "https://doi.org/10.1145/3543873.3587713",
       "ids": "Companion WWW '23 p. 657",
-      "citations": 12
-    },
-    {
-      "id": "x2",
-      "year": 2023,
-      "title": "Social network modeling and applications, a tutorial (preprint)",
-      "authors": [
-        "L. Espín-Noboa",
-        "T. Peixoto",
-        "F. Karimi"
-      ],
-      "venue": "arXiv",
-      "venueType": "Preprint",
-      "topic": "Edge Formation in Networks",
-      "affils": [
-        "CSH"
-      ],
-      "url": "https://arxiv.org/abs/2306.11004",
-      "ids": "arXiv:2306.11004 · preprint of the WWW '23 tutorial",
-      "citations": 3
+      "citations": 12,
+      "versions": [
+        {
+          "label": "Tutorial proposal",
+          "title": "Social network modeling and applications, a tutorial",
+          "venue": "arXiv",
+          "url": "https://arxiv.org/abs/2306.11004",
+          "ids": "arXiv:2306.11004",
+          "citations": 3
+        }
+      ]
     },
     {
       "id": "p5",
@@ -1030,8 +1006,8 @@ const SEED = {
       "affils": [
         "CEU"
       ],
-      "url": "",
-      "ids": "Practical ML for Developing Countries workshop",
+      "url": "https://pml4dc.github.io/iclr2022/pdf/PML4DC_ICLR2022_17.pdf",
+      "ids": "PML4DC @ ICLR 2022, paper 17",
       "citations": 3
     },
     {
@@ -1367,7 +1343,8 @@ const SEED = {
 const Util = {
   CAT_COLOR: {
     "Journal":"var(--c-journal)", "Conference":"var(--c-conference)",
-    "Workshop in proceedings":"var(--c-workshop)", "Workshop":"var(--c-workshop2)",
+    "Workshop in proceedings":"var(--c-workshop)",
+    "Tutorial in proceedings":"var(--c-tutorial)", "Workshop":"var(--c-workshop2)",
     "Preprint":"var(--c-preprint)",
     "Under review":"var(--c-review)", "In preparation":"var(--c-prep)",
     "Thesis":"var(--c-thesis)"
@@ -1375,7 +1352,7 @@ const Util = {
   /** Categories treated as not-yet-published, hidden by the checkbox. */
   UNPUBLISHED: ["Preprint","Under review","In preparation"],
 
-  FALLBACK: ["#1F7A6E","#3D5A6C","#5F7A3A","#93AC6E","#8C6D4F","#C9922F","#7A4A6B","#A85A3C"],
+  FALLBACK: ["#1F7A6E","#3D5A6C","#5F7A3A","#2E6F8E","#93AC6E","#8C6D4F","#C9922F","#7A4A6B","#A85A3C"],
 
   catColor(cat){ return Util.CAT_COLOR[cat] || "#9DA79E"; },
 
@@ -1428,7 +1405,7 @@ class Store {
     });
     this.filters = { year:null, topic:null, author:null, cat:null, text:"", hideUnpub:false };
     this.view = { groupBy:"year", sortBy:"cites-desc",
-                  netMode:"ego", netMin:1, chartHideUnpub:true };
+                  netMode:"ego", netMin:1 };
     this.emit();
   }
 
@@ -1440,6 +1417,12 @@ class Store {
     return this.data.profile.categories ||
            Util.uniq(this.data.papers.map(p => p.venueType));
   }
+  /** Citations for a work, counting any alternate versions of it. */
+  citesOf(p){
+    const own = p.citations || 0;
+    return own + (p.versions || []).reduce((a,v) => a + (v.citations || 0), 0);
+  }
+
   /** Primary affiliation — the first listed, per the CV convention. */
   primaryAffil(p){ return (p.affils && p.affils[0]) || "—"; }
 
@@ -1471,7 +1454,8 @@ class Store {
     if (f.topic && p.topic !== f.topic) return false;
     if (f.author && !p.authors.includes(f.author)) return false;
     if (q){
-      const hay = [p.title, p.venue, p.topic, p.authors.join(" "), (p.affils||[]).join(" ")]
+      const hay = [p.title, p.venue, p.topic, p.year, p.venueType,
+                   p.authors.join(" "), (p.affils||[]).join(" ")]
         .join(" ").toLowerCase();
       if (!hay.includes(q)) return false;
     }
@@ -1481,8 +1465,8 @@ class Store {
   /** The list (and the co-author graph) follow filters.hideUnpub. */
   get filtered(){ return this.data.papers.filter(p => this.matches(p, this.filters.hideUnpub)); }
 
-  /** The charts have their own toggle, independent of the list below. */
-  get chartPapers(){ return this.data.papers.filter(p => this.matches(p, this.view.chartHideUnpub)); }
+  /** The charts read the same set as the list; the toggle is shared. */
+  get chartPapers(){ return this.filtered; }
 
   /**
    * Three citation bands pinned to the h-index of whatever is currently shown:
@@ -1491,7 +1475,7 @@ class Store {
   tierBands(){
     const papers = this.filtered;
     if (!papers.length) return [];
-    const counts = papers.map(p => p.citations ?? 0);
+    const counts = papers.map(p => this.citesOf(p));
     const hAll = this.data.profile.hIndex;
     const h = (hAll != null && papers.length === this.data.papers.length)
       ? hAll : Util.hIndex(counts);
@@ -1506,14 +1490,14 @@ class Store {
   }
 
   tierOf(p){
-    const v = p.citations ?? 0;
+    const v = this.citesOf(p);
     const band = this.tierBands().find(b => v >= b.min && v <= b.max);
     return band ? band.label : "—";
   }
 
   /** Stacked series: one column per year, one layer per category. */
   stack(valueFn){
-    const papers = this.chartPapers;
+    const papers = this.filtered;
     const cats = this.categories;
     const byYear = Util.groupBy(papers, p => p.year);
     return Array.from(byYear, ([year, ps]) => {
@@ -1542,7 +1526,6 @@ class Store {
     };
   }
 
-  toJSON(){ return JSON.stringify(this.data, null, 2); }
 }
 
 /* ============================================================================
@@ -1676,8 +1659,8 @@ class StackedChartView {
   showPopup(event, column, seg, store){
     this.closePopup();
     this.closeOthers();
-    const papers = seg.papers.slice().sort((a,b) => (b.citations||0) - (a.citations||0));
-    const cites = papers.reduce((a,p) => a + (p.citations||0), 0);
+    const papers = seg.papers.slice().sort((a,b) => store.citesOf(b) - store.citesOf(a));
+    const cites = papers.reduce((a,p) => a + store.citesOf(p), 0);
     const self = store.self;
 
     const rows = papers.map(p => {
@@ -1694,7 +1677,7 @@ class StackedChartView {
       return `<li>
         ${title}
         <div class="m"><span>${Util.esc(p.venue)}</span>
-          <span class="c">${p.citations === null ? "—" : p.citations} cit.</span></div>
+          <span class="c">${store.citesOf(p)} cit.</span></div>
         <div class="au">${Util.esc(who)}</div>
       </li>`;
     }).join("");
@@ -1774,7 +1757,7 @@ class PaperListView {
   sortFn(mode){
     switch(mode){
       case "year-asc":   return (a,b) => a.year - b.year || a.title.localeCompare(b.title);
-      case "cites-desc": return (a,b) => (b.citations ?? -1) - (a.citations ?? -1);
+      case "cites-desc": return (a,b) => this.store.citesOf(b) - this.store.citesOf(a);
       case "title":      return (a,b) => a.title.localeCompare(b.title);
       default:           return (a,b) => b.year - a.year || a.title.localeCompare(b.title);
     }
@@ -1820,7 +1803,7 @@ class PaperListView {
 
     this.el.innerHTML = keys.map(k => {
       const list = groups.get(k);
-      const cites = list.reduce((a,p) => a + (p.citations || 0), 0);
+      const cites = list.reduce((a,p) => a + store.citesOf(p), 0);
       const sw = store.view.groupBy === "none" ? "" :
         `<span class="swatch" style="background:${Util.colorFor(String(k), palette)}"></span>`;
       return `<div class="group">
@@ -1856,6 +1839,27 @@ class PaperListView {
       <div class="cites">
         <span class="n">${p.citations === null ? "—" : p.citations}</span>
         <span class="cl">${p.citations === 1 ? "citation" : "citations"}</span>
+      </div>
+    </article>
+    ${(p.versions || []).map(v => this.versionRow(v)).join("")}`;
+  }
+
+  /** An alternate version of the work above it — same shape, indented, joined
+   *  by an elbow, with its own citation count so both remain visible. */
+  versionRow(v){
+    const title = v.url
+      ? `<a href="${Util.esc(v.url)}" target="_blank" rel="noopener">${Util.esc(v.title)}</a>`
+      : Util.esc(v.title);
+    return `<article class="paper version">
+      <div>
+        <div class="vlabel">${Util.esc(v.label || "Version")}</div>
+        <div class="t">${title}</div>
+        ${v.venue ? `<div class="meta"><span>${Util.esc(v.venue)}</span></div>` : ""}
+        ${v.ids ? `<div class="ids">${Util.esc(v.ids)}</div>` : ""}
+      </div>
+      <div class="cites">
+        <span class="n">${v.citations === null ? "—" : v.citations}</span>
+        <span class="cl">${v.citations === 1 ? "citation" : "citations"}</span>
       </div>
     </article>`;
   }
@@ -1903,22 +1907,45 @@ class NetworkView {
       .force("charge", d3.forceManyBody().strength(-190))
       .force("center", d3.forceCenter(W/2, H/2))
       .force("collide", d3.forceCollide().radius(d => r(d.papers) + 12))
+      // gentle pull to the middle so components with no links between them
+      // do not drift off the canvas
+      .force("x", d3.forceX(W/2).strength(.055))
+      .force("y", d3.forceY(H/2).strength(.09))
       .alpha(reheat ? 1 : .7)
       .on("tick", () => {
         linkSel.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y)
                .attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
         nodeSel.attr("transform", d => `translate(${d.x},${d.y})`);
-      });
+      })
+      .on("end", () => this.fit(nodes, r, W, H, root));
 
     nodeSel.call(d3.drag()
       .on("start",(e,d)=>{ if(!e.active) this.sim.alphaTarget(.25).restart(); d.fx=d.x; d.fy=d.y; })
       .on("drag",(e,d)=>{ d.fx=e.x; d.fy=e.y; })
       .on("end",(e,d)=>{ if(!e.active) this.sim.alphaTarget(0); d.fx=null; d.fy=null; }));
-    this.svg.call(d3.zoom().scaleExtent([.4,4]).on("zoom", e => root.attr("transform", e.transform)));
+    this.zoom = d3.zoom().scaleExtent([.15,4]).on("zoom", e => root.attr("transform", e.transform));
+    this.svg.call(this.zoom);
 
     const top = nodes.slice().sort((a,b) => b.papers - a.papers)[0];
     this.legend.text(`${nodes.length} people · ${links.length} ties · most frequent: ${top.id} (${top.papers})`);
   }
+  /** Zoom and pan so every node is inside the frame once the layout settles. */
+  fit(nodes, r, W, H, root){
+    if (!nodes.length || !this.zoom) return;
+    const pad = 18;
+    const x0 = d3.min(nodes, d => d.x - r(d.papers)) - pad;
+    const x1 = d3.max(nodes, d => d.x + r(d.papers)) + pad;
+    const y0 = d3.min(nodes, d => d.y - r(d.papers) - 12) - pad;
+    const y1 = d3.max(nodes, d => d.y + r(d.papers)) + pad;
+    const bw = x1 - x0, bh = y1 - y0;
+    if (!(bw > 0 && bh > 0)) return;
+    const k = Math.min(W / bw, H / bh, 1.25);
+    const t = d3.zoomIdentity
+      .translate(W/2 - k*(x0 + bw/2), H/2 - k*(y0 + bh/2))
+      .scale(k);
+    this.svg.transition().duration(400).call(this.zoom.transform, t);
+  }
+
   highlight(d, nodeSel, linkSel, links){
     const nb = new Set([d.id]);
     links.forEach(l => {
@@ -1937,15 +1964,15 @@ class NetworkView {
 }
 
 class ChipsView {
-  constructor(el, store){
-    this.el = el; this.store = store;
-    el.addEventListener("click", e => {
+  constructor(els, store){
+    this.els = Array.from(els); this.store = store;
+    this.els.forEach(el => el.addEventListener("click", e => {
       const c = e.target.closest("button[data-clear]");
       if (!c) return;
       const k = c.dataset.clear;
       this.store.set("filters." + k, k === "text" ? "" : (k === "hideUnpub" ? false : null));
-      if (k === "hideUnpub") document.getElementById("hide-unpub").checked = false;
-    });
+      if (k === "hideUnpub") window.app.syncToggles();
+    }));
   }
   render(store){
     const f = store.filters, out = [];
@@ -1955,8 +1982,11 @@ class ChipsView {
     if (f.author) out.push(["author", f.author]);
     if (f.text) out.push(["text", `“${f.text}”`]);
     if (f.hideUnpub) out.push(["hideUnpub", "Published only"]);
-    this.el.innerHTML = out.map(([k,l]) =>
-      `<button class="chip" data-clear="${k}">${Util.esc(l)}<span class="x">✕</span></button>`).join("");
+    const html = out.length
+      ? `<span class="chip-lead">Filtered by</span>` + out.map(([k,l]) =>
+          `<button class="chip" data-clear="${k}" title="Remove this filter">${Util.esc(l)}<span class="x">✕</span></button>`).join("")
+      : "";
+    this.els.forEach(el => { el.innerHTML = html; });
   }
 }
 
@@ -2067,7 +2097,7 @@ class App {
       recv: new SimpleChartView("#chart-recv", "var(--c-review)"),
       papers: new PaperListView(document.getElementById("paper-list"), this.store),
       network: new NetworkView("#network", "#net-legend", this.store),
-      chips: new ChipsView(document.getElementById("chips"), this.store),
+      chips: new ChipsView(document.querySelectorAll("[data-chips]"), this.store),
       tools: new ToolsView(document.getElementById("tool-grid"))
     };
     this.bindControls();
@@ -2080,16 +2110,12 @@ class App {
     const on = (id,ev,fn) => document.getElementById(id).addEventListener(ev,fn);
     on("group-by","change", e => this.store.set("view.groupBy", e.target.value));
     on("sort-by","change",  e => this.store.set("view.sortBy", e.target.value));
-    on("hide-unpub","change", e => this.store.set("filters.hideUnpub", e.target.checked));
-    on("chart-hide-unpub","change", e => this.store.set("view.chartHideUnpub", e.target.checked));
+    document.querySelectorAll(".pub-toggle").forEach(box =>
+      box.addEventListener("change", e => this.store.set("filters.hideUnpub", e.target.checked)));
     on("search","input", Util.debounce(e => this.store.set("filters.text", e.target.value), 180));
     on("net-mode","change", e => { this.store.set("view.netMode", e.target.value); this.views.network.render(this.store,true); });
     on("net-min","input",   e => { this.store.set("view.netMin", Number(e.target.value)||1); this.views.network.render(this.store,false); });
     on("net-reheat","click", () => this.views.network.render(this.store,true));
-    on("btn-load","click",   () => this.loadJSON());
-    on("btn-export","click", () => this.exportJSON());
-    on("btn-download","click", () => this.downloadJSON());
-    on("btn-reset","click",  () => { this.store.load(SEED); this.syncControls(); this.views.network.render(this.store,true); this.say("Reset to the built-in record.","ok"); });
     this.syncControls();
 
     let sig = "";
@@ -2100,46 +2126,27 @@ class App {
     });
   }
 
+  /** Keep the three "Published only" boxes showing the same state. */
+  syncToggles(){
+    document.querySelectorAll(".pub-toggle").forEach(b => { b.checked = this.store.filters.hideUnpub; });
+  }
+
   syncControls(){
-    document.getElementById("hide-unpub").checked = this.store.filters.hideUnpub;
-    document.getElementById("chart-hide-unpub").checked = this.store.view.chartHideUnpub;
+    this.syncToggles();
     document.getElementById("group-by").value = this.store.view.groupBy;
     document.getElementById("sort-by").value  = this.store.view.sortBy;
     document.getElementById("net-mode").value = this.store.view.netMode;
     document.getElementById("net-min").value  = this.store.view.netMin;
   }
 
-  say(msg, kind){
-    const el = document.getElementById("data-status");
-    el.textContent = msg; el.className = "status " + (kind || "");
-  }
-  loadJSON(){
-    try {
-      const parsed = JSON.parse(document.getElementById("data-io").value);
-      if (!parsed.papers || !Array.isArray(parsed.papers)) throw new Error("needs a `papers` array");
-      this.store.load(parsed); this.syncControls();
-      this.views.network.render(this.store,true);
-      this.say(`Loaded ${parsed.papers.length} works.`,"ok");
-    } catch(err){ this.say("That JSON didn't parse: " + err.message, "err"); }
-  }
-  exportJSON(){
-    const ta = document.getElementById("data-io");
-    ta.value = this.store.toJSON(); ta.select();
-    try { document.execCommand("copy"); this.say("Copied to your clipboard.","ok"); }
-    catch(e){ this.say("Select the text above and copy it.",""); }
-  }
-  downloadJSON(){
-    const blob = new Blob([this.store.toJSON()], {type:"application/json"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = "scholar-data.json"; a.click();
-    URL.revokeObjectURL(a.href); this.say("Downloaded scholar-data.json.","ok");
-  }
 
   render(store, source){
     const prof = store.data.profile;
     document.getElementById("hdr-name").textContent = prof.name;
     document.getElementById("hdr-role").textContent = prof.role;
     document.getElementById("hdr-affils").textContent = (prof.affiliations || []).join(" · ");
+    const ego = document.getElementById("opt-ego");
+    if (ego) ego.textContent = `Include ${prof.name.split(" ")[0]} at the centre`;
     const photo = document.getElementById("hdr-photo");
     if (prof.headshot){
       if (!photo.firstChild)
@@ -2147,6 +2154,7 @@ class App {
       photo.hidden = false;
     } else photo.hidden = true;
 
+    this.syncToggles();
     this.views.glance.render(store);
     this.views.legend.render(store);
     this.views.profiles.render(store);
@@ -2154,16 +2162,16 @@ class App {
     this.views.papers.render(store);
     this.views.tools.render(store);
 
-    const inCharts = store.chartPapers;
+    const inCharts = store.filtered;
     const pubSeries = store.stack(() => 1);
     this.views.pubs.render(pubSeries, store);
     document.getElementById("pub-sub").textContent =
       `${inCharts.length} of ${store.data.papers.length} works`;
-    document.getElementById("chart-scope").textContent = store.view.chartHideUnpub
-      ? "charts exclude preprints, under review and in preparation"
-      : "charts include everything";
+    document.getElementById("chart-scope").textContent = store.filters.hideUnpub
+      ? "excluding preprints, under review and in preparation"
+      : "including unpublished work";
 
-    const cbpSeries = store.stack(p => p.citations || 0);
+    const cbpSeries = store.stack(p => store.citesOf(p));
     this.views.cbp.render(cbpSeries, store);
     const cbpTotal = cbpSeries.reduce((a,s) => a + s.total, 0);
     document.getElementById("cbp-sub").textContent =
@@ -2175,9 +2183,6 @@ class App {
     document.getElementById("recv-sub").textContent = recv.length
       ? `${d3.sum(recv, d => d.value)} citations, in the year they arrived · not affected by filters`
       : "not filled in yet";
-
-    const ta = document.getElementById("data-io");
-    if (document.activeElement !== ta) ta.value = store.toJSON();
 
     document.getElementById("footer").textContent = prof.source
       ? prof.source + (prof.asOf ? ` Figures as of ${prof.asOf}.` : "")

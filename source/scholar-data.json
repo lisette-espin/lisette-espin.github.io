@@ -23,6 +23,7 @@
       "Journal",
       "Conference",
       "Workshop in proceedings",
+      "Tutorial in proceedings",
       "Workshop",
       "Preprint",
       "Under review",
@@ -576,33 +577,24 @@
         "F. Karimi"
       ],
       "venue": "The Web Conference (Companion)",
-      "venueType": "Conference",
+      "venueType": "Tutorial in proceedings",
       "topic": "Edge Formation in Networks",
       "affils": [
         "CSH"
       ],
       "url": "https://doi.org/10.1145/3543873.3587713",
       "ids": "Companion WWW '23 p. 657",
-      "citations": 12
-    },
-    {
-      "id": "x2",
-      "year": 2023,
-      "title": "Social network modeling and applications, a tutorial (preprint)",
-      "authors": [
-        "L. Espín-Noboa",
-        "T. Peixoto",
-        "F. Karimi"
-      ],
-      "venue": "arXiv",
-      "venueType": "Preprint",
-      "topic": "Edge Formation in Networks",
-      "affils": [
-        "CSH"
-      ],
-      "url": "https://arxiv.org/abs/2306.11004",
-      "ids": "arXiv:2306.11004 · preprint of the WWW '23 tutorial",
-      "citations": 3
+      "citations": 12,
+      "versions": [
+        {
+          "label": "Tutorial proposal",
+          "title": "Social network modeling and applications, a tutorial",
+          "venue": "arXiv",
+          "url": "https://arxiv.org/abs/2306.11004",
+          "ids": "arXiv:2306.11004",
+          "citations": 3
+        }
+      ]
     },
     {
       "id": "p5",
@@ -683,8 +675,8 @@
       "affils": [
         "CEU"
       ],
-      "url": "",
-      "ids": "Practical ML for Developing Countries workshop",
+      "url": "https://pml4dc.github.io/iclr2022/pdf/PML4DC_ICLR2022_17.pdf",
+      "ids": "PML4DC @ ICLR 2022, paper 17",
       "citations": 3
     },
     {
