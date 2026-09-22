@@ -212,9 +212,19 @@ class Store {
         linkW.set(k, (linkW.get(k)||0) + 1);
       });
     });
+    // the threshold drops people from the graph entirely, so the gender key
+    // and the counts describe exactly what is drawn
+    const min = this.view.netMin || 1;
+    const keep = new Set(Array.from(count)
+      .filter(([id,papers]) => id === self || papers >= min)
+      .map(([id]) => id));
     return {
-      nodes: Array.from(count, ([id,papers]) => ({ id, papers, self:id === self })),
-      links: Array.from(linkW, ([k,w]) => { const [source,target] = k.split("||"); return {source,target,w}; })
+      nodes: Array.from(count)
+        .filter(([id]) => keep.has(id))
+        .map(([id,papers]) => ({ id, papers, self:id === self })),
+      links: Array.from(linkW)
+        .map(([k,w]) => { const [source,target] = k.split("||"); return {source,target,w}; })
+        .filter(l => keep.has(l.source) && keep.has(l.target))
     };
   }
 
@@ -602,7 +612,7 @@ class NetworkView {
       .attr("stroke-width", d => store.hasAuthor(d.id) ? 3 : 1.5)
       .append("title").text(d => `${d.id} — ${d.papers} paper${d.papers === 1 ? "" : "s"}`);
     nodeSel.append("text").attr("dy", d => -r(d.papers) - 4).attr("text-anchor","middle")
-      .text(d => (d.papers >= store.view.netMin || d.self) ? Util.lastName(d.id) : "");
+      .text(d => Util.lastName(d.id));
 
     const act = d => store.toggleAuthor(d.id);
     nodeSel.on("click", (e,d) => act(d))
@@ -634,8 +644,16 @@ class NetworkView {
     this.zoom = d3.zoom().scaleExtent([.15,4]).on("zoom", e => root.attr("transform", e.transform));
     this.svg.call(this.zoom);
 
-    const top = nodes.slice().sort((a,b) => b.papers - a.papers)[0];
-    this.legend.text(`${nodes.length} people · ${links.length} ties · most frequent: ${top.id} (${top.papers})`);
+    // count and rank co-authors only: the ego is on every paper by definition,
+    // so including it would make it the trivial winner and would not match the
+    // gender key below, which is also about collaborators
+    const peers = nodes.filter(n => !n.self);
+    const top = peers.slice().sort((a,b) => b.papers - a.papers)[0];
+    const who = `${peers.length} co-author${peers.length === 1 ? "" : "s"}`;
+    const first = (store.data.profile.name || "").split(" ")[0];
+    this.legend.text(
+      `${nodes.length > peers.length && first ? first + " and " : ""}${who} · ${links.length} ties`
+      + (top ? ` · most frequent: ${top.id} (${top.papers})` : ""));
 
     // colour key, with the share of each group in the current selection
     const labels = store.data.profile.genderLabels || { F:"Women", M:"Men", U:"Not recorded" };
