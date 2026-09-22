@@ -130,7 +130,7 @@ window.DASHBOARD =
         "note": "Upcoming"
       },
       {
-        "role": "Associated Guest Researcher",
+        "role": "Research Fellow",
         "group": "Algorithmic Fairness & Network Inequality",
         "org": "Complexity Science Hub",
         "place": "Vienna, Austria",
