@@ -18,9 +18,9 @@
    ========================================================================= */
 const Util = {
   CAT_COLOR: {
-    "Journal":"var(--c-journal)", "Conference":"var(--c-conference)",
-    "Workshop in proceedings":"var(--c-workshop)",
-    "Tutorial in proceedings":"var(--c-tutorial)", "Workshop":"var(--c-workshop2)",
+    "Journal":"var(--c-journal)", "Conference in Proceedings":"var(--c-conference)",
+    "Workshop in Proceedings":"var(--c-workshop)",
+    "Tutorial in Proceedings":"var(--c-tutorial)", "Workshop":"var(--c-workshop2)",
     "Preprint":"var(--c-preprint)",
     "Under review":"var(--c-review)", "In preparation":"var(--c-prep)",
     "Thesis":"var(--c-thesis)"

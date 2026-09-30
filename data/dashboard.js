@@ -7,7 +7,8 @@ window.DASHBOARD =
     "name": "Lisette Espín-Noboa",
     "role": "Computational social scientist working on algorithm auditing and network inequality — who gets ranked, recommended and seen, and why.",
     "affiliations": [
-      "Graz University of Technology"
+      "Graz University of Technology",
+      "Complexity Science Hub"
     ],
     "interests": [
       "Computational Social Science",
@@ -19,15 +20,15 @@ window.DASHBOARD =
     "orcid": "0000-0002-3945-2966",
     "scholarUrl": "https://scholar.google.com/citations?user=oUBeyBUAAAAJ",
     "site": "https://www.lisetteespin.info",
-    "citationsTotal": 395,
+    "citationsTotal": 398,
     "hIndex": 10,
     "i10Index": 11,
-    "asOf": "22 September 2026",
+    "asOf": "30 September 2026",
     "categories": [
       "Journal",
-      "Conference",
-      "Workshop in proceedings",
-      "Tutorial in proceedings",
+      "Conference in Proceedings",
+      "Workshop in Proceedings",
+      "Tutorial in Proceedings",
       "Workshop",
       "Preprint",
       "Under review",
@@ -126,8 +127,7 @@ window.DASHBOARD =
         "org": "Graz University of Technology",
         "place": "Graz, Austria",
         "from": "Oct 2026",
-        "to": "",
-        "note": "Upcoming"
+        "to": "Present"
       },
       {
         "role": "Research Fellow",
@@ -355,15 +355,15 @@ window.DASHBOARD =
     "2015": 6,
     "2016": 20,
     "2017": 13,
-    "2018": 29,
+    "2018": 28,
     "2019": 25,
     "2020": 21,
     "2021": 23,
     "2022": 32,
-    "2023": 54,
+    "2023": 53,
     "2024": 52,
-    "2025": 50,
-    "2026": 70
+    "2025": 49,
+    "2026": 76
   },
   "papers": [
     {
@@ -416,7 +416,7 @@ window.DASHBOARD =
         "G. G. Méndez"
       ],
       "venue": "KDD",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "Algorithm Auditing, Interventions & Impact Assessment",
       "affils": [
         "CSH"
@@ -667,7 +667,7 @@ window.DASHBOARD =
         "D. J. Corsi"
       ],
       "venue": "ICWSM",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "NLP for Social Media",
       "affils": [
         "CEU"
@@ -688,7 +688,7 @@ window.DASHBOARD =
         "F. Karimi"
       ],
       "venue": "FAccT",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "Algorithmic Fairness in Social Networks",
       "affils": [
         "CSH",
@@ -773,7 +773,7 @@ window.DASHBOARD =
         "L. Espín-Noboa"
       ],
       "venue": "DSSG @ ECML PKDD",
-      "venueType": "Workshop in proceedings",
+      "venueType": "Workshop in Proceedings",
       "topic": "Poverty Inference",
       "affils": [
         "CEU"
@@ -792,14 +792,14 @@ window.DASHBOARD =
         "M. Karsai"
       ],
       "venue": "The Web Conference",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "Poverty Inference",
       "affils": [
         "CEU"
       ],
       "url": "https://doi.org/10.1145/3543507.3583862",
       "ids": "WWW '23 pp. 4029–4040 · arXiv:2302.10793",
-      "citations": 14
+      "citations": 15
     },
     {
       "id": "p13",
@@ -811,7 +811,7 @@ window.DASHBOARD =
         "F. Karimi"
       ],
       "venue": "The Web Conference (Companion)",
-      "venueType": "Tutorial in proceedings",
+      "venueType": "Tutorial in Proceedings",
       "topic": "Edge Formation in Networks",
       "affils": [
         "CSH"
@@ -849,7 +849,7 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1038/s41598-022-05434-1",
       "ids": "Sci Rep 12(1) · 7 Feb 2022 · Top 100 in Sustainability 2022",
-      "citations": 65
+      "citations": 67
     },
     {
       "id": "p4",
@@ -885,7 +885,7 @@ window.DASHBOARD =
         "C. Wagner"
       ],
       "venue": "WebSci",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "Algorithm Auditing, Interventions & Impact Assessment",
       "affils": [
         "CSH"
@@ -963,7 +963,7 @@ window.DASHBOARD =
         "M. A. Musen"
       ],
       "venue": "The Web Conference",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "Edge Formation in Networks",
       "affils": [
         "GESIS"
@@ -983,7 +983,7 @@ window.DASHBOARD =
         "K. Lerman"
       ],
       "venue": "MATNet @ The Web Conference",
-      "venueType": "Workshop in proceedings",
+      "venueType": "Workshop in Proceedings",
       "topic": "The Influence of Edge Formation in Algorithms",
       "affils": [
         "GESIS"
@@ -1027,7 +1027,7 @@ window.DASHBOARD =
         "M. Strohmaier"
       ],
       "venue": "ECML-PKDD",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "Edge Formation in Networks",
       "affils": [
         "GESIS"
@@ -1048,7 +1048,7 @@ window.DASHBOARD =
         "M. A. Musen"
       ],
       "venue": "The Web Conference",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "Edge Formation in Networks",
       "affils": [
         "GESIS"
@@ -1068,7 +1068,7 @@ window.DASHBOARD =
         "M. Strohmaier"
       ],
       "venue": "LocWeb @ The Web Conference",
-      "venueType": "Workshop in proceedings",
+      "venueType": "Workshop in Proceedings",
       "topic": "Edge Formation in Networks",
       "affils": [
         "GESIS"
@@ -1089,7 +1089,7 @@ window.DASHBOARD =
         "S. Ghosh"
       ],
       "venue": "ICWSM",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "NLP for Social Media",
       "affils": [
         "MPI-SWS",
@@ -1112,7 +1112,7 @@ window.DASHBOARD =
         "M. Strohmaier"
       ],
       "venue": "ISWC",
-      "venueType": "Conference",
+      "venueType": "Conference in Proceedings",
       "topic": "Edge Formation in Networks",
       "affils": [
         "GESIS"
