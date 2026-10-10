@@ -3,17 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Title, description, keywords, icons, theme colour and the structured-data
+     block are all written from data/dashboard.js at load. Nothing on this page
+     is content; edit the data file. -->
+<!-- Fallback copies for link previews (LinkedIn, Slack, X...), which read this
+     file without running scripts. app.js overwrites them at load, so the data
+     file still wins in the browser; keep these in step with data.meta. -->
 <title>Lisette Espín-Noboa — research record</title>
-<link rel="icon" href="assets/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<meta name="theme-color" content="#0A668D">
-<meta name="description" content="Publications, citations, collaborators and interactive tools of Lisette Espín-Noboa, computational social scientist working on algorithm auditing and network inequality.">
-<meta name="author" content="Lisette Espín-Noboa">
-<meta property="og:title" content="Lisette Espín-Noboa — research record">
-<meta property="og:description" content="Publications, citations, collaborators and interactive tools.">
+<meta name="description" content="Publications, citations and co-author network of Lisette Espín-Noboa (also written Lisette Espin-Noboa or Lisette Espin), computational social scientist working on network inequality, algorithmic fairness and large language models.">
 <meta property="og:type" content="profile">
-<meta name="robots" content="index, follow">
+<meta property="og:title" content="Lisette Espín-Noboa — research record">
+<meta property="og:description" content="Publications, citations, co-author network and interactive tools.">
+<meta property="og:image" content="https://lisette-espin.github.io/assets/headshot.jpg">
+<meta property="og:url" content="https://lisette-espin.github.io/">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@300;400;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
@@ -35,7 +38,7 @@ window.addEventListener("error", function(e){
 <header class="masthead wrap">
   <div class="mast-top">
     <div class="mast-txt">
-      <h1 id="hdr-name">Lisette Espín-Noboa</h1>
+      <h1 id="hdr-name"></h1>
       <p class="role" id="hdr-role"></p>
       <p class="affils" id="hdr-affils"></p>
     </div>
@@ -47,11 +50,8 @@ window.addEventListener("error", function(e){
 
 <main class="wrap">
 
-  <section id="sec-charts">
-    <div class="sec-head">
-      <h2>Output and uptake over time</h2>
-      <p>Bars are split by publication type. Click any segment in the first two charts to see which works it contains.</p>
-    </div>
+  <section id="sec-charts" hidden>
+    <div class="sec-head" data-section="charts"></div>
     <div class="legend" id="legend"></div>
     <div class="controls" style="margin-top:calc(var(--s2) * -1)">
       <label class="check">
@@ -62,28 +62,25 @@ window.addEventListener("error", function(e){
     <div class="chips" data-chips></div>
     <div class="charts">
       <div class="chart" id="wrap-pubs">
-        <h3>Papers per year</h3>
+        <h3 data-panel="pubs"></h3>
         <div class="sub" id="pub-sub"></div>
         <svg id="chart-pubs" role="img" aria-label="Papers per year by publication type"></svg>
       </div>
       <div class="chart" id="wrap-cbp">
-        <h3>Citations by year of publication</h3>
+        <h3 data-panel="cbp"></h3>
         <div class="sub" id="cbp-sub"></div>
         <svg id="chart-cbp" role="img" aria-label="Citations by year of publication and type"></svg>
       </div>
-      <div class="chart" id="wrap-recv">
-        <h3>Citations received per year</h3>
+      <div class="chart" id="wrap-recv" hidden>
+        <h3 data-panel="recv"></h3>
         <div class="sub" id="recv-sub"></div>
         <svg id="chart-recv" role="img" aria-label="Citations received per year"></svg>
       </div>
     </div>
   </section>
 
-  <section id="sec-network">
-    <div class="sec-head">
-      <h2>Co-authors</h2>
-      <p>Circle size is shared papers, line weight is how often two of them appear together, colour is inferred gender. Clicking names filters this graph and the paper list; pick several to see only the work you share with all of them.</p>
-    </div>
+  <section id="sec-network" hidden>
+    <div class="sec-head" data-section="network"></div>
     <div class="controls">
       <label>Layout
         <select id="net-mode">
@@ -107,11 +104,8 @@ window.addEventListener("error", function(e){
     </div>
   </section>
 
-  <section id="sec-papers">
-    <div class="sec-head">
-      <h2>Papers</h2>
-      <p>Grouping, sorting and filtering all act on the same set — the charts above follow along.</p>
-    </div>
+  <section id="sec-papers" hidden>
+    <div class="sec-head" data-section="papers"></div>
     <div class="controls">
       <label>Find
         <input type="search" id="search" placeholder="title, author, venue, year">
@@ -145,24 +139,26 @@ window.addEventListener("error", function(e){
     <div id="paper-list"></div>
   </section>
 
-  <section id="sec-tools">
-    <div class="sec-head">
-      <h2>Interactive tools</h2>
-      <p>Built with the visualisation team at the Complexity Science Hub, which hosts them.</p>
-    </div>
+  <section id="sec-tools" hidden>
+    <div class="sec-head" data-section="tools"></div>
     <div class="tools" id="tool-grid"></div>
   </section>
 
-  <section id="sec-background">
-    <div class="sec-head">
-      <h2>Background</h2>
-      <p>Where the work in this record was done.</p>
-    </div>
+  <section id="sec-podcasts" hidden>
+    <div class="sec-head" data-section="podcasts"></div>
+    <div id="pod-list"></div>
+  </section>
+
+  <section id="sec-background" hidden>
+    <div class="sec-head" data-section="background"></div>
     <div class="cvcols">
-      <div class="cvsub"><h3>Appointments</h3><ul class="tl" id="tl-appointments"></ul></div>
-      <div class="cvsub"><h3>Education</h3><ul class="tl" id="tl-education"></ul></div>
+      <div class="cvsub" id="cv-appointments" hidden>
+        <h3>Appointments</h3><ul class="tl" id="tl-appointments"></ul></div>
+      <div class="cvsub" id="cv-education" hidden>
+        <h3>Education</h3><ul class="tl" id="tl-education"></ul></div>
     </div>
-    <div class="cvsub cvwide"><h3>Research visits</h3><ul class="tl" id="tl-visits"></ul></div>
+    <div class="cvsub cvwide" id="cv-visits" hidden>
+      <h3>Research visits</h3><ul class="tl" id="tl-visits"></ul></div>
   </section>
 
 </main>

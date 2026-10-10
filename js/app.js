@@ -335,69 +335,98 @@ class StackedChartView {
     const col = svg.selectAll(".colgroup").data(series).join("g")
       .attr("class", d => "colgroup" + (String(d.key) === String(store.filters.year) ? " active" : ""));
 
+    // A single-citation slice can be barely a pixel tall, so the click target is
+    // the whole column rather than the individual segment.
+    if (this.opts.interactive){
+      const self0 = this;
+      col.append("rect").attr("class","hit")
+        .attr("x", d => x(d.key)).attr("width", x.bandwidth())
+        .attr("y", M.t).attr("height", H - M.b - M.t)
+        .attr("tabindex", 0).attr("role","button")
+        .attr("aria-label", d => `${d.key}: ${d.total}`)
+        .on("click", function(e, d){ e.stopPropagation(); self0.showPopup(e, d, store); })
+        .on("keydown", function(e, d){
+          if (e.key === "Enter" || e.key === " "){ e.preventDefault(); self0.showPopup(e, d, store); }
+        });
+    }
+
     const self = this;
     col.each(function(d){
       let acc = 0;
-      d3.select(this).selectAll("g").data(d.parts).join("g")
+      const segs = d3.select(this).selectAll("g").data(d.parts).join("g")
         .attr("class", "seg" + (self.opts.interactive ? "" : " flat"))
-        .attr("tabindex", self.opts.interactive ? 0 : null)
-        .attr("role", self.opts.interactive ? "button" : null)
-        .attr("aria-label", s => `${d.key}, ${s.cat}: ${s.value}`)
-        .each(function(s){
+        .attr("aria-label", s => `${d.key}, ${s.cat}: ${s.value}`);
+      // A segment opens the same popup as the column it belongs to: the popup
+      // covers the whole year, so a click anywhere in the bar means the same
+      // thing. Keyboard focus stays on the column's hit target, so each column
+      // is one tab stop rather than one per category.
+      if (self.opts.interactive){
+        segs.on("click", function(e){ e.stopPropagation(); self.showPopup(e, d, store); });
+      }
+      segs.each(function(s){
           const y0 = acc; acc += s.value;
           d3.select(this).append("rect")
             .attr("x", x(d.key)).attr("width", x.bandwidth())
             .attr("y", y(acc)).attr("height", Math.max(1, y(y0) - y(acc)))
             .attr("fill", Util.catColor(s.cat));
           d3.select(this).append("title").text(`${d.key} · ${s.cat}: ${s.value}`);
-        })
-        .on("click", function(e, s){
-          if (!self.opts.interactive) return;
-          e.stopPropagation();
-          self.showPopup(e, d, s, store);
-        })
-        .on("keydown", function(e, s){
-          if (self.opts.interactive && (e.key === "Enter" || e.key === " ")){
-            e.preventDefault(); self.showPopup(e, d, s, store);
-          }
         });
     });
   }
 
-  showPopup(event, column, seg, store){
+  showPopup(event, column, store){
     this.closePopup();
     this.closeOthers();
-    const papers = seg.papers.slice().sort((a,b) => store.citesOf(b) - store.citesOf(a));
-    const cites = papers.reduce((a,p) => a + store.citesOf(p), 0);
     const self = store.self;
+    const order = store.categories;
+    // On the citations chart a bar measures citations, so listing works that
+    // contributed none would not match the number above them.
+    const citesOnly = this.opts.unit === "citations";
+    const parts = column.parts.slice()
+      .sort((a,b) => order.indexOf(a.cat) - order.indexOf(b.cat))
+      .map(part => Object.assign({}, part, {
+        papers: citesOnly ? part.papers.filter(p => store.citesOf(p) > 0) : part.papers
+      }))
+      .filter(part => part.papers.length);
+    const works = parts.reduce((a,p) => a + p.papers.length, 0);
+    const cites = parts.reduce((a,p) => a + p.papers.reduce((s,x) => s + store.citesOf(x), 0), 0);
 
-    const rows = papers.map(p => {
-      const title = p.url
-        ? `<a class="t" href="${Util.esc(p.url)}" target="_blank" rel="noopener">${Util.esc(p.title)}</a>`
-        : `<span class="t">${Util.esc(p.title)}</span>`;
-      const role = store.authorshipOf(p);
-      const others = p.authors.filter(a => a !== self).length;
-      const peers = `${others} co-author${others === 1 ? "" : "s"}`;
-      // only first and last position are worth naming; middle authorship just shows the count
-      const who = role === "Sole author" ? "sole author"
-                : role === "Elsewhere"   ? peers
-                : `${role.toLowerCase()}, ${peers}`;
-      return `<li>
-        ${title}
-        <div class="m"><span>${Util.esc(p.venue)}</span>
-          <span class="c">${store.citesOf(p)} cit.</span></div>
-        <div class="au">${Util.esc(who)}</div>
-      </li>`;
+    const body = parts.map(part => {
+      const rows = part.papers.slice()
+        .sort((a,b) => store.citesOf(b) - store.citesOf(a))
+        .map(p => {
+          const title = p.url
+            ? `<a class="t" href="${Util.esc(p.url)}" target="_blank" rel="noopener">${Util.esc(p.title)}</a>`
+            : `<span class="t">${Util.esc(p.title)}</span>`;
+          const role = store.authorshipOf(p);
+          const others = p.authors.filter(a => a !== self).length;
+          const peers = `${others} co-author${others === 1 ? "" : "s"}`;
+          const who = role === "Sole author" ? "sole author"
+                    : role === "Elsewhere"   ? peers
+                    : `${role.toLowerCase()}, ${peers}`;
+          return `<li>
+            ${title}
+            <div class="m"><span>${Util.esc(p.venue)}</span>
+              <span class="c">${store.citesOf(p)} cit.</span></div>
+            <div class="au">${Util.esc(who)}</div>
+          </li>`;
+        }).join("");
+      return `<div class="pgrp">
+          <div class="ph sub"><i style="background:${Util.catColor(part.cat)}"></i>
+            <span class="lab">${Util.esc(part.cat)}</span>
+            <span class="sum">${part.value}</span></div>
+          <ul class="pl">${rows}</ul>
+        </div>`;
     }).join("");
 
     const box = document.createElement("div");
     box.className = "popup";
     box.innerHTML =
-      `<div class="ph"><i style="background:${Util.catColor(seg.cat)}"></i>
-         <span class="lab">${column.key} · ${Util.esc(seg.cat)}</span>
-         <span class="sum">${papers.length} ${papers.length === 1 ? "work" : "works"} · ${cites} cit.</span>
-       </div>
-       <ul class="pl">${rows}</ul>
+      `<div class="ph"><span class="lab">${column.key}</span>
+         <span class="sum">${citesOnly
+            ? `${cites} citation${cites === 1 ? "" : "s"} · ${works} ${works === 1 ? "work" : "works"}`
+            : `${works} ${works === 1 ? "work" : "works"} · ${cites} cit.`}</span></div>
+       <div class="pbody">${body}</div>
        <div class="pf"><button data-act="close">Close</button></div>`;
 
     const wrapBox = this.wrap.getBoundingClientRect();
@@ -405,7 +434,6 @@ class StackedChartView {
     box.style.top  = Math.max(6, event.clientY - wrapBox.top + 8) + "px";
     this.wrap.appendChild(box);
     this.popup = box;
-
     box.addEventListener("click", e => {
       if (e.target.closest('button[data-act="close"]')) this.closePopup();
     });
@@ -443,6 +471,21 @@ class SimpleChartView {
       .attr("y", d => y(d.value)).attr("height", d => y(0) - y(d.value))
       .attr("fill", this.color);
     g.append("title").text(d => `${d.key}: ${d.value}`);
+
+    // the count appears above the bar on hover, since a native tooltip is both
+    // slow to appear and easy to miss
+    const label = svg.append("text").attr("class","hoverval")
+      .attr("text-anchor","middle").attr("opacity",0);
+    g.on("mouseenter", function(e, d){
+        d3.select(this).classed("on", true);
+        label.attr("x", x(d.key) + x.bandwidth()/2)
+             .attr("y", Math.max(M.t + 9, y(d.value) - 5))
+             .text(d.value).attr("opacity", 1);
+      })
+      .on("mouseleave", function(){
+        d3.select(this).classed("on", false);
+        label.attr("opacity", 0);
+      });
   }
 }
 
@@ -451,7 +494,21 @@ class PaperListView {
     this.el = el; this.store = store;
     el.addEventListener("click", e => {
       const b = e.target.closest("button[data-author]");
-      if (b) this.store.toggleAuthor(b.dataset.author);
+      if (b){ this.store.toggleAuthor(b.dataset.author); return; }
+
+      const s = e.target.closest("button[data-spark], button[data-spark-v]");
+      if (s){
+        e.stopPropagation();
+        const id = s.dataset.spark || s.dataset.sparkV;
+        const paper = this.store.data.papers.find(x => x.id === id);
+        if (!paper) return;
+        const isVersion = !!s.dataset.sparkV;
+        const rec = isVersion ? paper.versions[0] : paper;
+        this.showSpark(s, rec, isVersion ? `${rec.label} · ${rec.title}` : paper.title);
+      }
+    });
+    document.addEventListener("click", e => {
+      if (this.spark && !this.spark.contains(e.target)) this.closeSpark();
     });
   }
 
@@ -477,7 +534,79 @@ class PaperListView {
     }
   }
 
+  closeSpark(){ if (this.spark){ this.spark.remove(); this.spark = null; } }
+
+  /** A bar chart of one work's citations: years across, counts up. */
+  showSpark(anchor, rec, title){
+    this.closeSpark();
+    const by = rec.citationsByYear || {};
+    const years = Object.keys(by).sort();
+    if (!years.length) return;
+    const vals = years.map(y => by[y]);
+    const max = Math.max(...vals, 1);
+
+    const box = document.createElement("div");
+    box.className = "spark";
+    box.innerHTML =
+      `<div class="sh">
+         <span>${Util.esc(title)}</span>
+         <button class="x" data-act="close" aria-label="Close">&times;</button>
+       </div>
+       <div class="ss">${rec.citations} citation${rec.citations === 1 ? "" : "s"} ·
+         ${years[0]}–${years[years.length-1]}</div>
+       <svg class="sfig" role="img"
+            aria-label="Citations per year: ${years.map((y,i) => `${y}, ${vals[i]}`).join("; ")}"></svg>`;
+    document.body.appendChild(box);
+
+    // Same grammar as the page's other charts — a left count axis, a bottom
+    // year axis and gridlines behind the bars — only smaller.
+    // M.t leaves a band above the tallest bar, so every count can sit outside
+    // its bar — inside, a light label on a light fill is unreadable.
+    const W = 272, H = 132, M = { t:14, r:4, b:20, l:24 };
+    const svg = d3.select(box.querySelector(".sfig"))
+      .attr("viewBox", `0 0 ${W} ${H}`);
+    const x = d3.scaleBand().domain(years).range([M.l, W - M.r]).padding(0.2);
+    const y = d3.scaleLinear().domain([0, max]).nice().range([H - M.b, M.t]);
+    const yt = y.ticks(Math.min(4, max));
+
+    svg.append("g").attr("class","grid").selectAll("line").data(yt).join("line")
+      .attr("x1", M.l).attr("x2", W - M.r).attr("y1", d => y(d)).attr("y2", d => y(d));
+    svg.append("g").attr("class","axis").attr("transform",`translate(0,${H - M.b})`)
+      .call(d3.axisBottom(x)
+        .tickValues(years.filter((d,i) => years.length < 8 || i % 2 === 0))
+        .tickSizeOuter(0));
+    svg.append("g").attr("class","axis").attr("transform",`translate(${M.l},0)`)
+      .call(d3.axisLeft(y).tickValues(yt).tickFormat(d3.format("d")).tickSizeOuter(0));
+
+    const bar = svg.selectAll(".sbar").data(years).join("g").attr("class","sbar");
+    bar.append("rect")
+      .attr("x", d => x(d)).attr("width", x.bandwidth())
+      .attr("y", (d,i) => y(vals[i]))
+      .attr("height", (d,i) => Math.max(1, y(0) - y(vals[i])));
+    // every count sits above its bar, so the chart reads without hovering
+    bar.append("text").attr("class","n")
+      .attr("x", d => x(d) + x.bandwidth() / 2)
+      .attr("y", (d,i) => y(vals[i]) - 3)
+      .attr("text-anchor","middle")
+      .text((d,i) => vals[i]);
+
+    box.addEventListener("click", e => {
+      if (e.target.closest('button[data-act="close"]')) this.closeSpark();
+    });
+    const r = anchor.getBoundingClientRect();
+    const bb = box.getBoundingClientRect();
+    let left = r.right - bb.width;
+    left = Math.max(8, Math.min(left, window.innerWidth - bb.width - 8));
+    let top = r.bottom + window.scrollY + 6;
+    if (r.bottom + bb.height + 12 > window.innerHeight)
+      top = r.top + window.scrollY - bb.height - 6;
+    box.style.left = left + "px";
+    box.style.top = top + "px";
+    this.spark = box;
+  }
+
   render(store){
+    this.closeSpark();
     const papers = store.filtered.slice().sort(this.sortFn(store.view.sortBy));
     if (!papers.length){
       this.el.innerHTML = `<p class="empty-note">Nothing matches these filters.</p>`;
@@ -551,17 +680,14 @@ class PaperListView {
         <div class="au">${authors}</div>
         ${p.ids ? `<div class="ids">${Util.esc(p.ids)}</div>` : ""}
       </div>
-      <div class="cites">
-        <span class="n">${p.citations === null ? "—" : p.citations}</span>
-        <span class="cl">${p.citations === 1 ? "citation" : "citations"}</span>
-      </div>
+      ${this.citesCell(p, `data-spark="${p.id}"`)}
     </article>
-    ${(p.versions || []).map(v => this.versionRow(v)).join("")}`;
+    ${(p.versions || []).map(v => this.versionRow(v, p.id)).join("")}`;
   }
 
   /** An alternate version of the work above it — same shape, indented, joined
    *  by an elbow, with its own citation count so both remain visible. */
-  versionRow(v){
+  versionRow(v, parentId){
     const title = v.url
       ? `<a href="${Util.esc(v.url)}" target="_blank" rel="noopener">${Util.esc(v.title)}</a>`
       : Util.esc(v.title);
@@ -572,11 +698,22 @@ class PaperListView {
         ${v.venue ? `<div class="meta"><span>${Util.esc(v.venue)}</span></div>` : ""}
         ${v.ids ? `<div class="ids">${Util.esc(v.ids)}</div>` : ""}
       </div>
-      <div class="cites">
-        <span class="n">${v.citations === null ? "—" : v.citations}</span>
-        <span class="cl">${v.citations === 1 ? "citation" : "citations"}</span>
-      </div>
+      ${this.citesCell(v, `data-spark-v="${parentId}"`)}
     </article>`;
+  }
+
+  /** The citation count, as one right-aligned block. When a year-by-year
+   *  breakdown exists the number and the word below it are a single button,
+   *  so the whole cell is the click target rather than three digits. */
+  citesCell(rec, attr){
+    const n = rec.citations === null ? "—" : rec.citations;
+    const word = rec.citations === 1 ? "citation" : "citations";
+    const inner = `<span class="n">${n}</span><span class="cl">${word}</span>`;
+    return `<div class="cites">${
+      rec.citationsByYear
+        ? `<button class="cbtn" ${attr} title="Show citations by year">${inner}</button>`
+        : inner
+    }</div>`;
   }
 }
 
@@ -727,6 +864,54 @@ class ChipsView {
   }
 }
 
+/** Podcast episodes. The Spotify player is only fetched once the visitor asks
+ *  for it, so an unopened page makes no third-party request. */
+class PodcastsView {
+  constructor(el, store){ this.el = el; this.store = store; }
+
+  /** The papers an episode discusses, as links. */
+  related(pod, store){
+    return (pod.paperIds || []).map(id => {
+      const p = store.data.papers.find(x => x.id === id);
+      if (!p) return "";
+      return p.url
+        ? `<span><a href="${Util.esc(p.url)}" target="_blank" rel="noopener">${Util.esc(p.title)}</a></span>`
+        : `<span>${Util.esc(p.title)}</span>`;
+    }).filter(Boolean).join("");
+  }
+
+  render(store){
+    const pods = store.data.podcasts || [];
+    const show = store.data.podcastShow;
+    Sections.show("sec-podcasts", pods.length > 0 || !!show);
+    const follow = document.querySelector('[data-extra="podcasts"]');
+    if (follow) follow.innerHTML = show && show.url
+      ? `Follow my channel <a href="${Util.esc(show.url)}" target="_blank" rel="noopener">${
+           Util.esc(show.name || "the show")}</a> on Spotify.`
+      : "";
+    if (!pods.length){ this.el.innerHTML = ""; return; }
+
+    // Spotify's own player carries the episode title and cover art, so the
+    // card around it adds only what Spotify does not know: the papers.
+    this.el.innerHTML = `<div class="pods">${pods.map(pod => {
+      const rel = this.related(pod, store);
+      const frame = pod.spotifyId
+        ? `<iframe src="https://open.spotify.com/embed/episode/${encodeURIComponent(pod.spotifyId)}"
+             width="100%" height="352" frameborder="0" loading="lazy"
+             allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+             title="${Util.esc(pod.title)}"></iframe>`
+        : `<a class="go" href="${Util.esc(pod.url)}" target="_blank" rel="noopener">Open in Spotify &rarr;</a>`;
+      return `<article class="pod embed">
+        <div class="frame">${frame}</div>
+        <div class="body">
+          <p>${Util.esc(pod.blurb)}</p>
+          ${rel ? `<div class="rel"><b>About</b>${rel}</div>` : ""}
+        </div>
+      </article>`;
+    }).join("")}</div>`;
+  }
+}
+
 /** Appointments, education and research visits — three timelines sharing one shape. */
 class TimelineView {
   constructor(store){
@@ -795,12 +980,16 @@ class TimelineView {
 
   render(store){
     const prof = store.data.profile;
-    if (this.els.appointments)
-      this.els.appointments.innerHTML = (prof.appointments || []).map(a => this.appointment(a)).join("");
-    if (this.els.education)
-      this.els.education.innerHTML = (prof.education || []).map(e => this.degree(e)).join("");
-    if (this.els.visits)
-      this.els.visits.innerHTML = (prof.visits || []).map(v => this.visit(v)).join("");
+    const fill = (key, list, row, wrapId) => {
+      const el = this.els[key];
+      if (el) el.innerHTML = (list || []).map(row).join("");
+      Sections.show(wrapId, (list || []).length > 0);
+      return (list || []).length;
+    };
+    const n = fill("appointments", prof.appointments, a => this.appointment(a), "cv-appointments")
+            + fill("education",    prof.education,    e => this.degree(e),      "cv-education")
+            + fill("visits",       prof.visits,       v => this.visit(v),       "cv-visits");
+    Sections.show("sec-background", n > 0);
   }
 }
 
@@ -866,6 +1055,7 @@ class ToolsView {
 
   render(store){
     const tools = store.data.tools || [];
+    Sections.show("sec-tools", tools.length > 0);
     if (!tools.length){ this.el.innerHTML = ""; return; }
     this.el.innerHTML = tools.map(t => {
       const shot = t.image
@@ -903,16 +1093,17 @@ class App {
       legend: new LegendView(document.getElementById("legend")),
       profiles: new ProfilesView(document.getElementById("hdr-profiles")),
       pubs: new StackedChartView("#chart-pubs", "#wrap-pubs", {
-        interactive:true, emptyText:"No works in this selection."
+        interactive:true, unit:"works", emptyText:"No works in this selection."
       }),
       cbp: new StackedChartView("#chart-cbp", "#wrap-cbp", {
-        interactive:true, emptyText:"No citations in this selection."
+        interactive:true, unit:"citations", emptyText:"No citations in this selection."
       }),
       recv: new SimpleChartView("#chart-recv", "var(--c-total)"),
       papers: new PaperListView(document.getElementById("paper-list"), this.store),
       network: new NetworkView("#network", "#net-legend", this.store),
       chips: new ChipsView(document.querySelectorAll("[data-chips]"), this.store),
       tools: new ToolsView(document.getElementById("tool-grid")),
+      podcasts: new PodcastsView(document.getElementById("pod-list"), this.store),
       timeline: new TimelineView(this.store)
     };
     this.bindControls();
@@ -970,6 +1161,11 @@ class App {
       photo.hidden = false;
     } else photo.hidden = true;
 
+    const nPapers = store.data.papers.length;
+    Sections.show("sec-charts", nPapers > 0);
+    Sections.show("sec-papers", nPapers > 0);
+    Sections.show("sec-network", store.data.papers.some(p => (p.authors || []).length > 1));
+
     this.syncToggles();
     this.views.glance.render(store);
     this.views.legend.render(store);
@@ -977,6 +1173,7 @@ class App {
     this.views.chips.render(store);
     this.views.papers.render(store);
     this.views.tools.render(store);
+    this.views.podcasts.render(store);
     this.views.timeline.render(store);
 
     const inCharts = store.filtered;
@@ -996,9 +1193,16 @@ class App {
 
     const cby = store.data.citationsByYear || {};
     const recv = Object.keys(cby).sort().map(k => ({ key:Number(k), value:Number(cby[k]) }));
+    Sections.show("wrap-recv", recv.length > 0);
     this.views.recv.render(recv, "No yearly histogram in the data.");
+    // When the yearly figures do not yet add up to the headline total, say how
+    // far they reach rather than padding a year to force agreement.
+    const dated = d3.sum(recv, d => d.value);
+    const short = (prof.citationsTotal || dated) - dated;
     document.getElementById("recv-sub").textContent = recv.length
-      ? `${d3.sum(recv, d => d.value)} citations, in the year they arrived · not affected by filters`
+      ? (short > 0
+          ? `${dated} of ${prof.citationsTotal} citations placed by year · not affected by filters`
+          : `${dated} citations, in the year they arrived · not affected by filters`)
       : "not filled in yet";
 
     document.getElementById("footer").textContent = prof.source
@@ -1007,8 +1211,159 @@ class App {
   }
 }
 
+/**
+ * Everything the page says about itself — title, description, search keywords,
+ * icons and the structured-data block — comes from data.meta, so index.html
+ * holds no content of its own.
+ */
+const Meta = {
+  apply(data){
+    const m = data.meta || {};
+    const prof = data.profile || {};
+    const name = m.author || prof.name || "";
+    const title = m.title || name;
+    if (m.lang) document.documentElement.lang = m.lang;
+    if (title) document.title = title;
+
+    const alts = m.alternateNames || [];
+    const keywords = [name].concat(alts, m.keywords || []).filter(Boolean);
+    this.tag("name", "description", m.description);
+    this.tag("name", "author", name);
+    this.tag("name", "keywords", keywords.join(", "));
+    this.tag("name", "theme-color", m.themeColor);
+    this.tag("name", "twitter:card", "summary");
+    this.tag("property", "og:type", "profile");
+    this.tag("property", "og:title", title);
+    this.tag("property", "og:description", m.shortDescription || m.description);
+    this.tag("property", "og:image", m.ogImage || prof.headshot);
+
+    (m.icons || Meta.DEFAULT_ICONS).forEach(i => this.icon(i));
+    this.jsonLD(data, name, alts, m, prof);
+  },
+
+  tag(attr, key, content){
+    if (!content) return;
+    let el = document.head.querySelector(`meta[${attr}="${key}"]`);
+    if (!el){ el = document.createElement("meta"); el.setAttribute(attr, key); document.head.appendChild(el); }
+    el.setAttribute("content", content);
+  },
+
+  icon(spec){
+    const el = document.createElement("link");
+    Object.keys(spec).forEach(k => el.setAttribute(k, spec[k]));
+    document.head.appendChild(el);
+  },
+
+  /** The name variants a search engine should treat as one person. */
+  jsonLD(data, name, alts, m, prof){
+    // every profile link doubles as a sameAs claim
+    const links = (prof.profiles || []).map(it => it && it.url).filter(Boolean);
+    const orcid = prof.orcid ? `https://orcid.org/${prof.orcid}` : null;
+    const node = {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name,
+      alternateName: alts,
+      jobTitle: m.jobTitle || prof.role,
+      affiliation: (prof.affiliations || []).map(a => ({ "@type":"Organization", name:a })),
+      alumniOf: (m.alumniOf || []).map(a => ({ "@type":"Organization", name:a })),
+      url: m.homepage,
+      identifier: orcid,
+      sameAs: Array.from(new Set([orcid, m.homepage].concat(links).filter(Boolean)))
+    };
+    Object.keys(node).forEach(k => {
+      const v = node[k];
+      if (v == null || (Array.isArray(v) && !v.length)) delete node[k];
+    });
+    const s = document.createElement("script");
+    s.type = "application/ld+json";
+    s.textContent = JSON.stringify(node, null, 2);
+    document.head.appendChild(s);
+  }
+};
+
+Meta.DEFAULT_ICONS = [
+  { rel:"icon", href:"assets/favicon.ico", sizes:"any" },
+  { rel:"icon", type:"image/png", sizes:"32x32", href:"assets/favicon-32.png" },
+  { rel:"apple-touch-icon", href:"assets/apple-touch-icon.png" }
+];
+
+/**
+ * Section headings and the line under them, also from the data file. A section
+ * with nothing to show is removed rather than left as an empty heading.
+ */
+const Sections = {
+  write(data){
+    const secs = data.sections || {};
+    document.querySelectorAll(".sec-head[data-section]").forEach(head => {
+      const s = secs[head.dataset.section] || {};
+      // the trailing span is where a view can add a line of its own
+      head.innerHTML = (s.title ? `<h2>${Util.esc(s.title)}</h2>` : "") +
+        `<p>${s.intro || ""} <span data-extra="${head.dataset.section}"></span></p>`;
+    });
+    const panels = (secs.charts || {}).panels || {};
+    document.querySelectorAll("h3[data-panel]").forEach(h => {
+      h.textContent = panels[h.dataset.panel] || "";
+    });
+  },
+
+  show(id, on){
+    const el = document.getElementById(id);
+    if (el) el.hidden = !on;
+  }
+};
+
+/**
+ * Per-paper, per-year citations live in their own CSV so they can be edited in
+ * a spreadsheet. The file is optional: without it the counts in the paper list
+ * are plain text rather than buttons. Columns: paper_id, title, year,
+ * citations. A version's id is "<paper id>:<version label>".
+ */
+const CitationYears = {
+  parse(text){
+    const rows = d3.csvParse(text);
+    const by = {};
+    rows.forEach(r => {
+      const id = (r.paper_id || "").trim();
+      const year = String(r.year || "").trim();
+      const n = Number(r.citations);
+      if (!id || !/^\d{4}$/.test(year) || !Number.isFinite(n) || n <= 0) return;
+      (by[id] = by[id] || {})[year] = (by[id][year] || 0) + n;
+    });
+    return by;
+  },
+
+  /** Hang each series on the paper or version it belongs to. */
+  attach(data, by){
+    let hit = 0;
+    data.papers.forEach(p => {
+      if (by[p.id]){ p.citationsByYear = by[p.id]; hit++; }
+      (p.versions || []).forEach(v => {
+        const key = p.id + ":" + (v.label || "version");
+        if (by[key]){ v.citationsByYear = by[key]; hit++; }
+      });
+    });
+    return hit;
+  },
+
+  /** The baked-in copy first, so the one-file build works offline; otherwise
+   *  the CSV next to the data file. A missing file is not an error. */
+  async load(data){
+    let text = window.DASHBOARD_CITATION_CSV || null;
+    if (!text){
+      try {
+        const res = await fetch("data/citations-by-paper-year.csv", { cache:"no-cache" });
+        if (res.ok) text = await res.text();
+      } catch (e){ /* file:// or no such file — counts stay plain */ }
+    }
+    if (!text) return 0;
+    try { return this.attach(data, this.parse(text)); }
+    catch (e){ return 0; }
+  }
+};
+
 /** Build the page from the record loaded by data/dashboard.js. */
-function boot(){
+async function boot(){
   const data = window.DASHBOARD;
   const main = document.querySelector("main");
   if (!data || !Array.isArray(data.papers)){
@@ -1024,6 +1379,9 @@ function boot(){
     </div></section>`;
     return;
   }
+  Meta.apply(data);
+  Sections.write(data);
+  await CitationYears.load(data);
   window.app = new App(data);
 }
 document.addEventListener("DOMContentLoaded", boot);

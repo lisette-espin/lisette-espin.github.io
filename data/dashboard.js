@@ -20,10 +20,10 @@ window.DASHBOARD =
     "orcid": "0000-0002-3945-2966",
     "scholarUrl": "https://scholar.google.com/citations?user=oUBeyBUAAAAJ",
     "site": "https://www.lisetteespin.info",
-    "citationsTotal": 398,
+    "citationsTotal": 400,
     "hIndex": 10,
     "i10Index": 11,
-    "asOf": "30 September 2026",
+    "asOf": "10 October 2026",
     "categories": [
       "Journal",
       "Conference in Proceedings",
@@ -35,7 +35,7 @@ window.DASHBOARD =
       "In preparation",
       "Thesis"
     ],
-    "source": "Publication list and categories from the author's own CV (Sep 2026). Citation counts and the yearly histogram from Google Scholar.",
+    "source": "Publication list and categories from the author's own CV. Citation counts and the yearly histogram from Google Scholar.",
     "affilCountry": {
       "CSH": "Austria",
       "CEU": "Austria",
@@ -89,6 +89,11 @@ window.DASHBOARD =
         "group": "Academic",
         "name": "dblp",
         "url": "https://dblp.org/pid/163/6256.html"
+      },
+      {
+        "group": "Academic",
+        "name": "OpenAlex",
+        "url": "https://openalex.org/authors/a5014548243"
       },
       {
         "group": "Academic",
@@ -357,13 +362,14 @@ window.DASHBOARD =
     "2017": 13,
     "2018": 28,
     "2019": 25,
-    "2020": 21,
+    "2020": 22,
     "2021": 23,
     "2022": 32,
     "2023": 53,
-    "2024": 52,
+    "2024": 53,
     "2025": 49,
-    "2026": 76
+    "2026": 75,
+    "2027": 1
   },
   "papers": [
     {
@@ -510,7 +516,7 @@ window.DASHBOARD =
       ],
       "url": "https://arxiv.org/abs/2605.28187",
       "ids": "arXiv:2605.28187",
-      "citations": 0
+      "citations": 1
     },
     {
       "id": "p34",
@@ -949,7 +955,7 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1007/s41109-021-00394-3",
       "ids": "Appl Netw Sci 6(1):78 · 21 Oct 2021",
-      "citations": 12
+      "citations": 13
     },
     {
       "id": "p15",
@@ -1237,5 +1243,97 @@ window.DASHBOARD =
         "p27"
       ]
     }
-  ]
+  ],
+  "podcasts": [
+    {
+      "id": "wnc1",
+      "title": "Whose Name Comes Up? I: Auditing LLM-Based Scholar Recommendations",
+      "blurb": "A walk through the first audit: which scholars six open-weight models put forward as physics experts, and how often those names turn out not to exist.",
+      "url": "https://open.spotify.com/episode/0CP4vnJiMVd6QGoHxPKpjg",
+      "spotifyId": "0CP4vnJiMVd6QGoHxPKpjg",
+      "paperIds": [
+        "p24"
+      ]
+    },
+    {
+      "id": "canpreg",
+      "title": "Cannabis Use During Pregnancy on Twitter in USA and Canada",
+      "blurb": "What online discourse across the USA and Canada reveals about how different groups are exposed to health risks, and what socioeconomic indicators add to the picture.",
+      "url": "https://open.spotify.com/episode/2RoNZxnjhZf4rPr03XJJIc",
+      "spotifyId": "2RoNZxnjhZf4rPr03XJJIc",
+      "paperIds": [
+        "p9"
+      ]
+    }
+  ],
+  "meta": {
+    "lang": "en",
+    "title": "Lisette Espín-Noboa — research record",
+    "description": "Publications, citations and co-author network of Lisette Espín-Noboa (also written Lisette Espin-Noboa or Lisette Espin), computational social scientist working on network inequality, algorithmic fairness and large language models.",
+    "shortDescription": "Publications, citations, co-author network and interactive tools.",
+    "author": "Lisette Espín-Noboa",
+    "jobTitle": "Computational social scientist",
+    "homepage": "https://www.lisetteespin.info/",
+    "themeColor": "#0A668D",
+    "ogImage": "assets/headshot.jpg",
+    "alternateNames": [
+      "Lisette Espin-Noboa",
+      "Lisette Espin Noboa",
+      "Lisette Espín Noboa",
+      "Lisette Espin",
+      "Lisette Espín",
+      "Lisette Noboa",
+      "Lisette Munz",
+      "L. Espín-Noboa"
+    ],
+    "keywords": [
+      "computational social science",
+      "network inequality",
+      "algorithmic fairness",
+      "large language models",
+      "Complexity Science Hub",
+      "CSH Vienna",
+      "Central European University",
+      "CEU",
+      "TU Graz"
+    ],
+    "alumniOf": [
+      "Central European University"
+    ]
+  },
+  "sections": {
+    "charts": {
+      "title": "Output and uptake over time",
+      "intro": "Bars are split by publication type. Click any bar in the first two charts to see which works it contains.",
+      "panels": {
+        "pubs": "Papers per year",
+        "cbp": "Citations by year of publication",
+        "recv": "Citations received per year"
+      }
+    },
+    "network": {
+      "title": "Co-authors",
+      "intro": "Circle size is shared papers, line weight is how often two of them appear together, colour is inferred gender. Clicking names filters this graph and the paper list; pick several to see only the work you share with all of them."
+    },
+    "papers": {
+      "title": "Papers",
+      "intro": "Grouping, sorting and filtering all act on the same set — the charts above follow along."
+    },
+    "tools": {
+      "title": "Interactive tools",
+      "intro": "Built with the visualisation team at the Complexity Science Hub, which hosts them."
+    },
+    "podcasts": {
+      "title": "Deep dives",
+      "intro": "Audio walk-throughs of individual papers, generated with NotebookLM and revised by me."
+    },
+    "background": {
+      "title": "Background",
+      "intro": ""
+    }
+  },
+  "podcastShow": {
+    "name": "Computational Social Science by LEEN",
+    "url": "https://open.spotify.com/show/6tlDTnZ00diZQM9xVYi8zq"
+  }
 };
