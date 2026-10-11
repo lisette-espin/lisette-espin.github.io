@@ -1,8 +1,85 @@
-// All the content of this page. Everything below is plain JSON wrapped in one
-// assignment, so a browser can load it straight from disk as well as from a
-// web server. Edit freely; index.html needs no changes.
+// GENERATED FILE — do not edit.
+//
+// Built by build.py from data/content.json and
+// data/citations-by-paper-year.csv. Edit those, then run:
+//
+//     python3 build.py
+//
+// Everything below is plain JSON wrapped in one assignment, so a browser can
+// load it straight from disk as well as from a web server.
 window.DASHBOARD =
 {
+  "meta": {
+    "lang": "en",
+    "title": "Lisette Espín-Noboa — research record",
+    "description": "Publications, citations and co-author network of Lisette Espín-Noboa (also written Lisette Espin-Noboa or Lisette Espin), computational social scientist working on network inequality, algorithmic fairness and large language models.",
+    "shortDescription": "Publications, citations, co-author network and interactive tools.",
+    "author": "Lisette Espín-Noboa",
+    "jobTitle": "Computational social scientist",
+    "homepage": "https://www.lisetteespin.info/",
+    "themeColor": "#0A668D",
+    "ogImage": "assets/headshot.jpg",
+    "alternateNames": [
+      "Lisette Espin-Noboa",
+      "Lisette Espin Noboa",
+      "Lisette Espin",
+      "Lisette Espín-Noboa",
+      "Lisette Espín Noboa",
+      "Lisette Espín",
+      "Lisette Noboa",
+      "Lisette Munz",
+      "L. Espín-Noboa",
+      "L Esín-Noboa"
+    ],
+    "keywords": [
+      "computational social science",
+      "network inequality",
+      "algorithmic fairness",
+      "large language models",
+      "Complexity Science Hub",
+      "CSH Vienna",
+      "Central European University",
+      "CEU",
+      "Graz University of Technology",
+      "TU Graz"
+    ],
+    "alumniOf": [
+      "Escuela Superior Politécnica del Litoral",
+      "Universiry of Koblenz-Landau"
+    ],
+    "siteUrl": "https://lisette-espin.github.io/"
+  },
+  "sections": {
+    "charts": {
+      "title": "Output and uptake over time",
+      "intro": "Bars are split by publication type. Hover a year for its total, or click it to see which works it covers.",
+      "panels": {
+        "pubs": "Papers per year",
+        "cbp": "Citations by year of publication",
+        "recv": "Citations received per year"
+      }
+    },
+    "network": {
+      "title": "Co-authors",
+      "intro": "Circle size is shared papers, line weight is how often two of them appear together, colour is inferred gender. Clicking names filters this graph and the paper list; pick several to see only the work you share with all of them."
+    },
+    "papers": {
+      "title": "Papers",
+      "intro": "Grouping, sorting and filtering all act on the same set — the charts above follow along."
+    },
+    "tools": {
+      "title": "Interactive tools",
+      "intro": "Built with the visualisation team at the Complexity Science Hub, which hosts them."
+    },
+    "podcasts": {
+      "title": "Deep dives",
+      "intro": "Audio walk-throughs of individual papers, generated with NotebookLM and revised by me."
+    },
+    "background": {
+      "title": "Background",
+      "intro": ""
+    }
+  },
   "profile": {
     "name": "Lisette Espín-Noboa",
     "role": "Computational social scientist working on algorithm auditing and network inequality — who gets ranked, recommended and seen, and why.",
@@ -20,10 +97,6 @@ window.DASHBOARD =
     "orcid": "0000-0002-3945-2966",
     "scholarUrl": "https://scholar.google.com/citations?user=oUBeyBUAAAAJ",
     "site": "https://www.lisetteespin.info",
-    "citationsTotal": 400,
-    "hIndex": 10,
-    "i10Index": 11,
-    "asOf": "10 October 2026",
     "categories": [
       "Journal",
       "Conference in Proceedings",
@@ -94,6 +167,11 @@ window.DASHBOARD =
         "group": "Academic",
         "name": "OpenAlex",
         "url": "https://openalex.org/authors/a5014548243"
+      },
+      {
+        "group": "Academic",
+        "name": "Semantic Scholar",
+        "url": "https://www.semanticscholar.org/author/Lisette-Esp%C3%ADn-Noboa/2311505033"
       },
       {
         "group": "Academic",
@@ -354,22 +432,11 @@ window.DASHBOARD =
       "F": "Women",
       "M": "Men",
       "U": "Not recorded"
-    }
-  },
-  "citationsByYear": {
-    "2015": 6,
-    "2016": 20,
-    "2017": 13,
-    "2018": 28,
-    "2019": 25,
-    "2020": 22,
-    "2021": 23,
-    "2022": 32,
-    "2023": 53,
-    "2024": 53,
-    "2025": 49,
-    "2026": 75,
-    "2027": 1
+    },
+    "citationsTotal": 404,
+    "hIndex": 10,
+    "i10Index": 11,
+    "asOf": "11 October 2026"
   },
   "papers": [
     {
@@ -390,7 +457,11 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1162/QSS.a.4749",
       "ids": "QSS pp. 1–17 · 23 Mar 2026",
-      "citations": 6
+      "citations": 6,
+      "citationsByYear": {
+        "2025": 2,
+        "2026": 4
+      }
     },
     {
       "id": "p1",
@@ -411,7 +482,11 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1038/s41598-026-42911-3",
       "ids": "Sci Rep 16(1):13461 · 13 Mar 2026",
-      "citations": 6
+      "citations": 6,
+      "citationsByYear": {
+        "2025": 1,
+        "2026": 5
+      }
     },
     {
       "id": "p8",
@@ -429,7 +504,10 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3770855.3817543",
       "ids": "SIGKDD v2 · extended: arXiv:2602.08873",
-      "citations": 1
+      "citations": 1,
+      "citationsByYear": {
+        "2026": 1
+      }
     },
     {
       "id": "p25",
@@ -516,7 +594,10 @@ window.DASHBOARD =
       ],
       "url": "https://arxiv.org/abs/2605.28187",
       "ids": "arXiv:2605.28187",
-      "citations": 1
+      "citations": 1,
+      "citationsByYear": {
+        "2026": 1
+      }
     },
     {
       "id": "p34",
@@ -702,7 +783,10 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3715275.3732143",
       "ids": "FAccT '25 pp. 2112–2126",
-      "citations": 4
+      "citations": 4,
+      "citationsByYear": {
+        "2026": 4
+      }
     },
     {
       "id": "p22",
@@ -747,7 +831,11 @@ window.DASHBOARD =
       ],
       "url": "https://arxiv.org/abs/2506.00074",
       "ids": "arXiv:2506.00074",
-      "citations": 7
+      "citations": 7,
+      "citationsByYear": {
+        "2025": 1,
+        "2026": 6
+      }
     },
     {
       "id": "p27",
@@ -786,7 +874,11 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1007/978-3-032-25314-9_15",
       "ids": "Data Science for Social Good workshop · pp. 197–218",
-      "citations": 3
+      "citations": 3,
+      "citationsByYear": {
+        "2025": 1,
+        "2026": 2
+      }
     },
     {
       "id": "p12",
@@ -805,7 +897,14 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3543507.3583862",
       "ids": "WWW '23 pp. 4029–4040 · arXiv:2302.10793",
-      "citations": 15
+      "citations": 16,
+      "citationsByYear": {
+        "2023": 1,
+        "2024": 2,
+        "2025": 4,
+        "2026": 8,
+        "2027": 1
+      }
     },
     {
       "id": "p13",
@@ -824,7 +923,6 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3543873.3587713",
       "ids": "Companion WWW '23 p. 657",
-      "citations": 12,
       "versions": [
         {
           "label": "Tutorial proposal",
@@ -832,9 +930,22 @@ window.DASHBOARD =
           "venue": "arXiv",
           "url": "https://arxiv.org/abs/2306.11004",
           "ids": "arXiv:2306.11004",
-          "citations": 3
+          "citations": 3,
+          "citationsByYear": {
+            "2024": 1,
+            "2025": 1,
+            "2026": 1
+          }
         }
-      ]
+      ],
+      "citations": 12,
+      "citationsByYear": {
+        "2020": 1,
+        "2022": 1,
+        "2023": 2,
+        "2024": 6,
+        "2025": 2
+      }
     },
     {
       "id": "p5",
@@ -855,7 +966,14 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1038/s41598-022-05434-1",
       "ids": "Sci Rep 12(1) · 7 Feb 2022 · Top 100 in Sustainability 2022",
-      "citations": 67
+      "citations": 68,
+      "citationsByYear": {
+        "2022": 8,
+        "2023": 13,
+        "2024": 11,
+        "2025": 15,
+        "2026": 21
+      }
     },
     {
       "id": "p4",
@@ -878,7 +996,13 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.2196/34421",
       "ids": "JMIR Res Protoc 11(3):e34421 · 29 Mar 2022",
-      "citations": 8
+      "citations": 8,
+      "citationsByYear": {
+        "2023": 2,
+        "2024": 2,
+        "2025": 3,
+        "2026": 1
+      }
     },
     {
       "id": "p14",
@@ -898,7 +1022,14 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3501247.3531583",
       "ids": "WebSci '22 pp. 228–238 · 26 Jun 2022",
-      "citations": 54
+      "citations": 55,
+      "citationsByYear": {
+        "2022": 3,
+        "2023": 16,
+        "2024": 14,
+        "2025": 9,
+        "2026": 13
+      }
     },
     {
       "id": "x1",
@@ -917,7 +1048,12 @@ window.DASHBOARD =
       ],
       "url": "https://pml4dc.github.io/iclr2022/pdf/PML4DC_ICLR2022_17.pdf",
       "ids": "PML4DC @ ICLR 2022, paper 17",
-      "citations": 3
+      "citations": 3,
+      "citationsByYear": {
+        "2022": 1,
+        "2023": 1,
+        "2024": 1
+      }
     },
     {
       "id": "p35",
@@ -955,7 +1091,14 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1007/s41109-021-00394-3",
       "ids": "Appl Netw Sci 6(1):78 · 21 Oct 2021",
-      "citations": 13
+      "citations": 13,
+      "citationsByYear": {
+        "2022": 3,
+        "2023": 4,
+        "2024": 3,
+        "2025": 1,
+        "2026": 2
+      }
     },
     {
       "id": "p15",
@@ -976,7 +1119,14 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3308558.3313487",
       "ids": "WWW '19 pp. 2708–2714 · 13 May 2019",
-      "citations": 9
+      "citations": 9,
+      "citationsByYear": {
+        "2020": 2,
+        "2021": 2,
+        "2022": 2,
+        "2023": 2,
+        "2024": 1
+      }
     },
     {
       "id": "p16",
@@ -996,7 +1146,16 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3184558.3191567",
       "ids": "Companion WWW '18 pp. 1277–1285 · arXiv:1803.02422",
-      "citations": 17
+      "citations": 18,
+      "citationsByYear": {
+        "2020": 1,
+        "2021": 6,
+        "2022": 1,
+        "2023": 2,
+        "2024": 2,
+        "2025": 4,
+        "2026": 2
+      }
     },
     {
       "id": "p7",
@@ -1016,7 +1175,16 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1007/s41109-017-0036-1",
       "ids": "Appl Netw Sci 2(1):16 · 24 Jun 2017",
-      "citations": 10
+      "citations": 10,
+      "citationsByYear": {
+        "2017": 2,
+        "2018": 2,
+        "2019": 1,
+        "2021": 1,
+        "2022": 1,
+        "2023": 2,
+        "2024": 1
+      }
     },
     {
       "id": "p17",
@@ -1040,7 +1208,11 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1007/978-3-319-71273-4_30",
       "ids": "ECML-PKDD pp. 354–357 · 30 Dec 2017",
-      "citations": 2
+      "citations": 2,
+      "citationsByYear": {
+        "2018": 1,
+        "2022": 1
+      }
     },
     {
       "id": "p18",
@@ -1061,7 +1233,17 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3038912.3052606",
       "ids": "WWW '17 pp. 775–784 · 3 Apr 2017",
-      "citations": 15
+      "citations": 15,
+      "citationsByYear": {
+        "2017": 1,
+        "2018": 4,
+        "2019": 3,
+        "2020": 1,
+        "2021": 1,
+        "2022": 2,
+        "2023": 2,
+        "2025": 1
+      }
     },
     {
       "id": "p19",
@@ -1081,7 +1263,19 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/2872518.2890468",
       "ids": "Companion WWW '16 pp. 537–542 · 11 Apr 2016",
-      "citations": 43
+      "citations": 43,
+      "citationsByYear": {
+        "2016": 2,
+        "2017": 6,
+        "2018": 8,
+        "2019": 8,
+        "2020": 2,
+        "2021": 6,
+        "2022": 3,
+        "2023": 4,
+        "2024": 1,
+        "2026": 3
+      }
     },
     {
       "id": "p21",
@@ -1103,7 +1297,21 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1609/icwsm.v9i1.14634",
       "ids": "ICWSM pp. 218–227 · 26 May 2015",
-      "citations": 73
+      "citations": 73,
+      "citationsByYear": {
+        "2015": 4,
+        "2016": 11,
+        "2017": 1,
+        "2018": 7,
+        "2019": 6,
+        "2020": 14,
+        "2021": 7,
+        "2022": 4,
+        "2023": 2,
+        "2024": 8,
+        "2025": 4,
+        "2026": 5
+      }
     },
     {
       "id": "p20",
@@ -1125,7 +1333,16 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1007/978-3-319-25007-6_32",
       "ids": "ISWC pp. 551–568 · Springer · 30 Oct 2015",
-      "citations": 28
+      "citations": 28,
+      "citationsByYear": {
+        "2015": 2,
+        "2016": 7,
+        "2017": 3,
+        "2018": 6,
+        "2019": 7,
+        "2020": 1,
+        "2022": 2
+      }
     },
     {
       "id": "p36",
@@ -1266,74 +1483,23 @@ window.DASHBOARD =
       ]
     }
   ],
-  "meta": {
-    "lang": "en",
-    "title": "Lisette Espín-Noboa — research record",
-    "description": "Publications, citations and co-author network of Lisette Espín-Noboa (also written Lisette Espin-Noboa or Lisette Espin), computational social scientist working on network inequality, algorithmic fairness and large language models.",
-    "shortDescription": "Publications, citations, co-author network and interactive tools.",
-    "author": "Lisette Espín-Noboa",
-    "jobTitle": "Computational social scientist",
-    "homepage": "https://www.lisetteespin.info/",
-    "themeColor": "#0A668D",
-    "ogImage": "assets/headshot.jpg",
-    "alternateNames": [
-      "Lisette Espin-Noboa",
-      "Lisette Espin Noboa",
-      "Lisette Espín Noboa",
-      "Lisette Espin",
-      "Lisette Espín",
-      "Lisette Noboa",
-      "Lisette Munz",
-      "L. Espín-Noboa"
-    ],
-    "keywords": [
-      "computational social science",
-      "network inequality",
-      "algorithmic fairness",
-      "large language models",
-      "Complexity Science Hub",
-      "CSH Vienna",
-      "Central European University",
-      "CEU",
-      "TU Graz"
-    ],
-    "alumniOf": [
-      "Central European University"
-    ]
-  },
-  "sections": {
-    "charts": {
-      "title": "Output and uptake over time",
-      "intro": "Bars are split by publication type. Click any bar in the first two charts to see which works it contains.",
-      "panels": {
-        "pubs": "Papers per year",
-        "cbp": "Citations by year of publication",
-        "recv": "Citations received per year"
-      }
-    },
-    "network": {
-      "title": "Co-authors",
-      "intro": "Circle size is shared papers, line weight is how often two of them appear together, colour is inferred gender. Clicking names filters this graph and the paper list; pick several to see only the work you share with all of them."
-    },
-    "papers": {
-      "title": "Papers",
-      "intro": "Grouping, sorting and filtering all act on the same set — the charts above follow along."
-    },
-    "tools": {
-      "title": "Interactive tools",
-      "intro": "Built with the visualisation team at the Complexity Science Hub, which hosts them."
-    },
-    "podcasts": {
-      "title": "Deep dives",
-      "intro": "Audio walk-throughs of individual papers, generated with NotebookLM and revised by me."
-    },
-    "background": {
-      "title": "Background",
-      "intro": ""
-    }
-  },
   "podcastShow": {
     "name": "Computational Social Science by LEEN",
     "url": "https://open.spotify.com/show/6tlDTnZ00diZQM9xVYi8zq"
+  },
+  "citationsByYear": {
+    "2015": 6,
+    "2016": 20,
+    "2017": 13,
+    "2018": 28,
+    "2019": 25,
+    "2020": 22,
+    "2021": 23,
+    "2022": 32,
+    "2023": 53,
+    "2024": 53,
+    "2025": 49,
+    "2026": 79,
+    "2027": 1
   }
 };

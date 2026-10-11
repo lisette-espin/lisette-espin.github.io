@@ -71,17 +71,14 @@ section{padding:var(--s5) 0}
 .chart h3{font-size:1rem;margin-bottom:.2rem}
 .chart .sub{font-size:.78rem;color:var(--ink-soft);margin-bottom:var(--s2);min-height:1.1em}
 .chart svg{width:100%;height:auto;display:block}
-.seg{cursor:pointer}
-.seg.flat{cursor:default}
 .seg rect{transition:opacity .12s}
 .colgroup:hover .seg rect{opacity:.82}
 .colgroup.active .seg rect{stroke:var(--ink);stroke-width:1.4}
 .grid line{stroke:var(--rule);stroke-width:1;shape-rendering:crispEdges}
 .axis text{font-size:10px;fill:var(--ink-soft)}
 .hoverval{font-size:11px;font-weight:600;fill:var(--ink);pointer-events:none}
-.seg.flat rect{transition:opacity .12s}
-.seg.flat.on rect{opacity:.72}
-.colgroup rect.hit{fill:transparent;cursor:pointer}
+.colgroup rect.hit{fill:transparent}
+svg.live .colgroup{cursor:pointer}
 .colgroup:hover rect.hit{fill:var(--ink);fill-opacity:.045}
 .colgroup rect.hit:focus-visible{outline:2px solid var(--c-journal);outline-offset:-2px}
 .axis line,.axis path{stroke:var(--rule)}

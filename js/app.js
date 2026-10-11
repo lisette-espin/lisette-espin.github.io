@@ -201,6 +201,40 @@ class Store {
     }).sort((a,b) => a.key - b.key);
   }
 
+  /**
+   * Citations grouped by the calendar year they arrived, split by the type of
+   * the work that earned them. Unlike stack(), one work appears in every year
+   * it was cited, and contributes only that year's citations — so each part
+   * carries a per-paper count for the year rather than the paper's total.
+   */
+  stackReceived(){
+    const cats = this.categories;
+    const years = new Map();
+    this.filtered.forEach(p => {
+      const series = {};
+      const add = rec => Object.keys(rec.citationsByYear || {})
+        .forEach(y => { series[y] = (series[y] || 0) + rec.citationsByYear[y]; });
+      add(p);
+      (p.versions || []).forEach(add);
+
+      Object.keys(series).forEach(y => {
+        const year = Number(y);
+        if (!years.has(year)) years.set(year, new Map());
+        const byCat = years.get(year);
+        if (!byCat.has(p.venueType))
+          byCat.set(p.venueType, { cat:p.venueType, value:0, papers:[], counts:new Map() });
+        const part = byCat.get(p.venueType);
+        part.value += series[y];
+        part.papers.push(p);
+        part.counts.set(p.id, series[y]);
+      });
+    });
+    return Array.from(years, ([year, byCat]) => {
+      const parts = cats.map(c => byCat.get(c)).filter(Boolean);
+      return { key:year, parts, total: parts.reduce((a,s) => a + s.value, 0) };
+    }).sort((a,b) => a.key - b.key);
+  }
+
   network(){
     const self = this.self, papers = this.filtered;
     const count = new Map(), linkW = new Map();
@@ -304,8 +338,11 @@ class StackedChartView {
   closeOthers(){ StackedChartView.instances.forEach(v => { if (v !== this) v.closePopup(); }); }
 
   render(series, store){
-    const W = 520, H = 200, M = { t:8, r:6, b:22, l:32 };
-    const svg = this.svg.attr("viewBox", `0 0 ${W} ${H}`);
+    // M.t leaves a band above the tallest bar, so the hover total always sits
+    // outside it — inside, dark text on a dark segment is unreadable.
+    const W = 520, H = 200, M = { t:20, r:6, b:22, l:32 };
+    const svg = this.svg.attr("viewBox", `0 0 ${W} ${H}`)
+      .classed("live", !!this.opts.interactive);
     svg.selectAll("*").remove();
     this.closePopup();
 
@@ -335,15 +372,31 @@ class StackedChartView {
     const col = svg.selectAll(".colgroup").data(series).join("g")
       .attr("class", d => "colgroup" + (String(d.key) === String(store.filters.year) ? " active" : ""));
 
+    // the column total appears above the bar on hover, since a native tooltip
+    // is both slow to appear and easy to miss
+    const label = svg.append("text").attr("class","hoverval")
+      .attr("text-anchor","middle").attr("opacity",0);
+
     // A single-citation slice can be barely a pixel tall, so the click target is
     // the whole column rather than the individual segment.
+    const self0 = this;
+    const hit = col.append("rect")
+      .attr("class", "hit")
+      .attr("x", d => x(d.key)).attr("width", x.bandwidth())
+      .attr("y", M.t).attr("height", H - M.b - M.t)
+      .attr("aria-label", d => `${d.key}: ${d.total}`);
+
+    // the handler goes on the column, not on the hit rect, because the bars
+    // are drawn on top of it and would otherwise swallow the pointer
+    col.on("mouseenter", (e, d) => {
+        label.attr("x", x(d.key) + x.bandwidth()/2)
+             .attr("y", y(d.total) - 5)
+             .text(d.total).attr("opacity", 1);
+      })
+      .on("mouseleave", () => label.attr("opacity", 0));
+
     if (this.opts.interactive){
-      const self0 = this;
-      col.append("rect").attr("class","hit")
-        .attr("x", d => x(d.key)).attr("width", x.bandwidth())
-        .attr("y", M.t).attr("height", H - M.b - M.t)
-        .attr("tabindex", 0).attr("role","button")
-        .attr("aria-label", d => `${d.key}: ${d.total}`)
+      hit.attr("tabindex", 0).attr("role","button")
         .on("click", function(e, d){ e.stopPropagation(); self0.showPopup(e, d, store); })
         .on("keydown", function(e, d){
           if (e.key === "Enter" || e.key === " "){ e.preventDefault(); self0.showPopup(e, d, store); }
@@ -382,18 +435,21 @@ class StackedChartView {
     // On the citations chart a bar measures citations, so listing works that
     // contributed none would not match the number above them.
     const citesOnly = this.opts.unit === "citations";
+    // On the received-per-year chart a part carries the count each work earned
+    // in that one year; elsewhere a work's number is its lifetime total.
+    const countOf = (part, p) => part.counts ? (part.counts.get(p.id) || 0) : store.citesOf(p);
     const parts = column.parts.slice()
       .sort((a,b) => order.indexOf(a.cat) - order.indexOf(b.cat))
       .map(part => Object.assign({}, part, {
-        papers: citesOnly ? part.papers.filter(p => store.citesOf(p) > 0) : part.papers
+        papers: citesOnly ? part.papers.filter(p => countOf(part, p) > 0) : part.papers
       }))
       .filter(part => part.papers.length);
     const works = parts.reduce((a,p) => a + p.papers.length, 0);
-    const cites = parts.reduce((a,p) => a + p.papers.reduce((s,x) => s + store.citesOf(x), 0), 0);
+    const cites = parts.reduce((a,p) => a + p.papers.reduce((s,x) => s + countOf(p, x), 0), 0);
 
     const body = parts.map(part => {
       const rows = part.papers.slice()
-        .sort((a,b) => store.citesOf(b) - store.citesOf(a))
+        .sort((a,b) => countOf(part, b) - countOf(part, a))
         .map(p => {
           const title = p.url
             ? `<a class="t" href="${Util.esc(p.url)}" target="_blank" rel="noopener">${Util.esc(p.title)}</a>`
@@ -407,7 +463,8 @@ class StackedChartView {
           return `<li>
             ${title}
             <div class="m"><span>${Util.esc(p.venue)}</span>
-              <span class="c">${store.citesOf(p)} cit.</span></div>
+              <span class="c">${countOf(part, p)} cit.${part.counts
+                 ? ` in ${column.key}` : ""}</span></div>
             <div class="au">${Util.esc(who)}</div>
           </li>`;
         }).join("");
@@ -441,53 +498,6 @@ class StackedChartView {
 }
 
 StackedChartView.instances = [];
-
-/** Plain (unstacked) columns — used for the Scholar received-per-year series. */
-class SimpleChartView {
-  constructor(svgSel, color){ this.svg = d3.select(svgSel); this.color = color; }
-  render(series, emptyText){
-    const W = 520, H = 200, M = { t:8, r:6, b:22, l:32 };
-    const svg = this.svg.attr("viewBox", `0 0 ${W} ${H}`);
-    svg.selectAll("*").remove();
-    if (!series.length){
-      svg.append("text").attr("x", M.l).attr("y", 44).attr("class","empty-note").text(emptyText);
-      return;
-    }
-    const x = d3.scaleBand().domain(series.map(d => d.key)).range([M.l, W-M.r]).padding(0.22);
-    const y = d3.scaleLinear().domain([0, d3.max(series, d => d.value) || 1]).nice().range([H-M.b, M.t]);
-    // tick lines first, so the bars sit on top of them
-    svg.append("g").attr("class","grid").selectAll("line")
-      .data(y.ticks(4)).join("line")
-      .attr("x1", M.l).attr("x2", W - M.r)
-      .attr("y1", d => y(d)).attr("y2", d => y(d));
-
-    svg.append("g").attr("class","axis").attr("transform",`translate(0,${H-M.b})`)
-       .call(d3.axisBottom(x).tickValues(x.domain().filter((d,i) => series.length < 13 || i % 2 === 0)).tickSizeOuter(0));
-    svg.append("g").attr("class","axis").attr("transform",`translate(${M.l},0)`)
-       .call(d3.axisLeft(y).ticks(4).tickSizeOuter(0));
-    const g = svg.selectAll(".seg").data(series).join("g").attr("class","seg flat");
-    g.append("rect")
-      .attr("x", d => x(d.key)).attr("width", x.bandwidth())
-      .attr("y", d => y(d.value)).attr("height", d => y(0) - y(d.value))
-      .attr("fill", this.color);
-    g.append("title").text(d => `${d.key}: ${d.value}`);
-
-    // the count appears above the bar on hover, since a native tooltip is both
-    // slow to appear and easy to miss
-    const label = svg.append("text").attr("class","hoverval")
-      .attr("text-anchor","middle").attr("opacity",0);
-    g.on("mouseenter", function(e, d){
-        d3.select(this).classed("on", true);
-        label.attr("x", x(d.key) + x.bandwidth()/2)
-             .attr("y", Math.max(M.t + 9, y(d.value) - 5))
-             .text(d.value).attr("opacity", 1);
-      })
-      .on("mouseleave", function(){
-        d3.select(this).classed("on", false);
-        label.attr("opacity", 0);
-      });
-  }
-}
 
 class PaperListView {
   constructor(el, store){
@@ -1098,7 +1108,9 @@ class App {
       cbp: new StackedChartView("#chart-cbp", "#wrap-cbp", {
         interactive:true, unit:"citations", emptyText:"No citations in this selection."
       }),
-      recv: new SimpleChartView("#chart-recv", "var(--c-total)"),
+      recv: new StackedChartView("#chart-recv", "#wrap-recv", {
+        interactive:true, unit:"citations", emptyText:"No citations in this selection."
+      }),
       papers: new PaperListView(document.getElementById("paper-list"), this.store),
       network: new NetworkView("#network", "#net-legend", this.store),
       chips: new ChipsView(document.querySelectorAll("[data-chips]"), this.store),
@@ -1191,18 +1203,12 @@ class App {
     document.getElementById("cbp-sub").textContent =
       `${cbpTotal} citations, placed in the year the work appeared`;
 
-    const cby = store.data.citationsByYear || {};
-    const recv = Object.keys(cby).sort().map(k => ({ key:Number(k), value:Number(cby[k]) }));
-    Sections.show("wrap-recv", recv.length > 0);
-    this.views.recv.render(recv, "No yearly histogram in the data.");
-    // When the yearly figures do not yet add up to the headline total, say how
-    // far they reach rather than padding a year to force agreement.
-    const dated = d3.sum(recv, d => d.value);
-    const short = (prof.citationsTotal || dated) - dated;
-    document.getElementById("recv-sub").textContent = recv.length
-      ? (short > 0
-          ? `${dated} of ${prof.citationsTotal} citations placed by year · not affected by filters`
-          : `${dated} citations, in the year they arrived · not affected by filters`)
+    const recvSeries = store.stackReceived();
+    Sections.show("wrap-recv", recvSeries.length > 0);
+    this.views.recv.render(recvSeries, store);
+    const dated = recvSeries.reduce((a,s) => a + s.total, 0);
+    document.getElementById("recv-sub").textContent = recvSeries.length
+      ? `${dated} citations, in the year they arrived`
       : "not filled in yet";
 
     document.getElementById("footer").textContent = prof.source
@@ -1235,10 +1241,18 @@ const Meta = {
     this.tag("property", "og:type", "profile");
     this.tag("property", "og:title", title);
     this.tag("property", "og:description", m.shortDescription || m.description);
-    this.tag("property", "og:image", m.ogImage || prof.headshot);
+    // a preview card needs a whole URL, not a path relative to the page
+    this.tag("property", "og:image", Meta.absolute(m.ogImage || prof.headshot, m.siteUrl));
+    this.tag("property", "og:url", m.siteUrl);
 
     (m.icons || Meta.DEFAULT_ICONS).forEach(i => this.icon(i));
     this.jsonLD(data, name, alts, m, prof);
+  },
+
+  /** A site-relative path turned into a full URL, where one is known. */
+  absolute(path, siteUrl){
+    if (!path || !siteUrl || /^(https?:|data:)/.test(path)) return path;
+    return siteUrl.replace(/\/+$/, "") + "/" + path.replace(/^\/+/, "");
   },
 
   tag(attr, key, content){
@@ -1313,57 +1327,9 @@ const Sections = {
   }
 };
 
-/**
- * Per-paper, per-year citations live in their own CSV so they can be edited in
- * a spreadsheet. The file is optional: without it the counts in the paper list
- * are plain text rather than buttons. Columns: paper_id, title, year,
- * citations. A version's id is "<paper id>:<version label>".
- */
-const CitationYears = {
-  parse(text){
-    const rows = d3.csvParse(text);
-    const by = {};
-    rows.forEach(r => {
-      const id = (r.paper_id || "").trim();
-      const year = String(r.year || "").trim();
-      const n = Number(r.citations);
-      if (!id || !/^\d{4}$/.test(year) || !Number.isFinite(n) || n <= 0) return;
-      (by[id] = by[id] || {})[year] = (by[id][year] || 0) + n;
-    });
-    return by;
-  },
-
-  /** Hang each series on the paper or version it belongs to. */
-  attach(data, by){
-    let hit = 0;
-    data.papers.forEach(p => {
-      if (by[p.id]){ p.citationsByYear = by[p.id]; hit++; }
-      (p.versions || []).forEach(v => {
-        const key = p.id + ":" + (v.label || "version");
-        if (by[key]){ v.citationsByYear = by[key]; hit++; }
-      });
-    });
-    return hit;
-  },
-
-  /** The baked-in copy first, so the one-file build works offline; otherwise
-   *  the CSV next to the data file. A missing file is not an error. */
-  async load(data){
-    let text = window.DASHBOARD_CITATION_CSV || null;
-    if (!text){
-      try {
-        const res = await fetch("data/citations-by-paper-year.csv", { cache:"no-cache" });
-        if (res.ok) text = await res.text();
-      } catch (e){ /* file:// or no such file — counts stay plain */ }
-    }
-    if (!text) return 0;
-    try { return this.attach(data, this.parse(text)); }
-    catch (e){ return 0; }
-  }
-};
-
-/** Build the page from the record loaded by data/dashboard.js. */
-async function boot(){
+/** Build the page from the record loaded by data/dashboard.js, which
+ *  build.py generates from data/content.json and the citations CSV. */
+function boot(){
   const data = window.DASHBOARD;
   const main = document.querySelector("main");
   if (!data || !Array.isArray(data.papers)){
@@ -1381,7 +1347,6 @@ async function boot(){
   }
   Meta.apply(data);
   Sections.write(data);
-  await CitationYears.load(data);
   window.app = new App(data);
 }
 document.addEventListener("DOMContentLoaded", boot);
