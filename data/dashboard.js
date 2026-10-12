@@ -436,7 +436,7 @@ window.DASHBOARD =
     "citationsTotal": 404,
     "hIndex": 10,
     "i10Index": 11,
-    "asOf": "11 October 2026"
+    "asOf": "12 October 2026"
   },
   "papers": [
     {
@@ -455,7 +455,7 @@ window.DASHBOARD =
       "affils": [
         "CSH"
       ],
-      "url": "https://doi.org/10.1162/QSS.a.4749",
+      "url": "https://doi.org/10.1162/QSS.a.474",
       "ids": "QSS pp. 1–17 · 23 Mar 2026",
       "citations": 6,
       "citationsByYear": {
