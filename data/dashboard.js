@@ -433,10 +433,10 @@ window.DASHBOARD =
       "M": "Men",
       "U": "Not recorded"
     },
-    "citationsTotal": 404,
+    "citationsTotal": 406,
     "hIndex": 10,
     "i10Index": 11,
-    "asOf": "12 October 2026"
+    "asOf": "15 October 2026"
   },
   "papers": [
     {
@@ -966,12 +966,12 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1038/s41598-022-05434-1",
       "ids": "Sci Rep 12(1) · 7 Feb 2022 · Top 100 in Sustainability 2022",
-      "citations": 68,
+      "citations": 69,
       "citationsByYear": {
         "2022": 8,
         "2023": 13,
         "2024": 11,
-        "2025": 15,
+        "2025": 16,
         "2026": 21
       }
     },
@@ -1263,7 +1263,7 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/2872518.2890468",
       "ids": "Companion WWW '16 pp. 537–542 · 11 Apr 2016",
-      "citations": 43,
+      "citations": 44,
       "citationsByYear": {
         "2016": 2,
         "2017": 6,
@@ -1272,7 +1272,7 @@ window.DASHBOARD =
         "2020": 2,
         "2021": 6,
         "2022": 3,
-        "2023": 4,
+        "2023": 5,
         "2024": 1,
         "2026": 3
       }
@@ -1496,9 +1496,9 @@ window.DASHBOARD =
     "2020": 22,
     "2021": 23,
     "2022": 32,
-    "2023": 53,
+    "2023": 54,
     "2024": 53,
-    "2025": 49,
+    "2025": 50,
     "2026": 79,
     "2027": 1
   }
