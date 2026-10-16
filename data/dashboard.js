@@ -433,10 +433,10 @@ window.DASHBOARD =
       "M": "Men",
       "U": "Not recorded"
     },
-    "citationsTotal": 406,
+    "citationsTotal": 408,
     "hIndex": 10,
     "i10Index": 11,
-    "asOf": "15 October 2026"
+    "asOf": "17 October 2026"
   },
   "papers": [
     {
@@ -741,7 +741,10 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1140/epjds/s13688-024-00515-9",
       "ids": "EPJ DS 14(1):3 · 17 Jan 2025",
-      "citations": 0
+      "citations": 1,
+      "citationsByYear": {
+        "2025": 1
+      }
     },
     {
       "id": "p9",
@@ -831,9 +834,9 @@ window.DASHBOARD =
       ],
       "url": "https://arxiv.org/abs/2506.00074",
       "ids": "arXiv:2506.00074",
-      "citations": 7,
+      "citations": 8,
       "citationsByYear": {
-        "2025": 1,
+        "2025": 2,
         "2026": 6
       }
     },
@@ -1498,7 +1501,7 @@ window.DASHBOARD =
     "2022": 32,
     "2023": 54,
     "2024": 53,
-    "2025": 50,
+    "2025": 52,
     "2026": 79,
     "2027": 1
   }
