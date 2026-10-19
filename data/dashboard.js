@@ -436,7 +436,7 @@ window.DASHBOARD =
     "citationsTotal": 408,
     "hIndex": 10,
     "i10Index": 11,
-    "asOf": "17 October 2026"
+    "asOf": "19 October 2026"
   },
   "papers": [
     {
@@ -850,14 +850,15 @@ window.DASHBOARD =
         "A. M. Jaramillo",
         "L. Yang"
       ],
-      "venue": "In preparation",
-      "venueType": "In preparation",
+      "venue": "arXiv",
+      "venueType": "Under review",
       "topic": "Disparities in Academia",
       "affils": [
+        "TU Graz",
         "CSH"
       ],
-      "url": "https://bit.ly/ICSSI25_ChineseNames",
-      "ids": "",
+      "url": "https://arxiv.org/abs/2610.23734",
+      "ids": "arXiv:2610.23734",
       "citations": 0
     },
     {
