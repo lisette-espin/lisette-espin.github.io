@@ -372,7 +372,7 @@
       "D. Helic": "M",
       "D. J. Corsi": "M",
       "E. Cruz": "M",
-      "E. Prim": "M",
+      "E. Prem": "M",
       "F. Karimi": "F",
       "F. Lemmerich": "M",
       "F. Momeni": "F",
@@ -503,14 +503,14 @@
     {
       "id": "p30",
       "year": 2026,
-      "title": "From Network Inequality to Network Fairness: A Perspective on Responsible Social Decision-Making",
+      "title": "From Network Inequality to Network Fairness: A Perspective on Responsible Decision-Making",
       "authors": [
         "L. Espín-Noboa",
-        "M. Zehlike",
-        "P. H. Wong",
-        "E. Prim",
-        "R. Baeza-Yates",
         "T. Eliassi-Rad",
+        "P. H. Wong",
+        "E. Prem",
+        "M. Zehlike",
+        "R. Baeza-Yates",
         "S. Venkatasubramanian",
         "F. Karimi"
       ],
@@ -786,7 +786,7 @@
     },
     {
       "id": "p27",
-      "year": 2025,
+      "year": 2026,
       "title": "Bridging the Language Gap in Scholarly Data II: Enhancing Gender Inference for Chinese Names",
       "authors": [
         "L. Espín-Noboa",
