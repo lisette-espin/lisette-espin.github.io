@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """Copy the `meta` block of data/dashboard.js into the head of index.html.
 
+build.py runs this for you; you rarely need to call it yourself.
+
 Link-preview scrapers — LinkedIn, Slack, X, Bluesky, WhatsApp — fetch the HTML
 and read it without running any JavaScript, so they never see the tags app.js
 writes. index.html therefore keeps a static copy of the handful of tags that
 matter to them. This script regenerates that copy, so the two cannot drift.
 
-build.py runs it after writing data/dashboard.js, so there is no need to run
-it yourself: edit `meta` in data/content.json, then
+Run it after editing `meta` in data/dashboard.js:
 
-    python3 build.py
+    python3 sync_meta.py
 
 It rewrites only what sits between the STATIC META markers and reports whether
 anything changed. Everything else about the page still comes from the data file

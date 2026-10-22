@@ -874,6 +874,90 @@ class ChipsView {
   }
 }
 
+/** Released packages and datasets. Text only — each entry is a name, what it
+ *  does, where to get it, and the papers it belongs to. */
+class SoftwareView {
+  constructor(el){ this.el = el; }
+
+  render(store){
+    const soft = store.data.software || {};
+    const items = soft.items || [];
+    Sections.show("sec-software", items.length > 0);
+    const more = document.querySelector('[data-extra="software"]');
+    if (more) more.innerHTML = soft.moreUrl
+      ? `<a href="${Util.esc(soft.moreUrl)}" target="_blank" rel="noopener">${
+           Util.esc(soft.moreLabel || "more")}</a>.`
+      : "";
+    if (!items.length){ this.el.innerHTML = ""; return; }
+
+    this.el.innerHTML = items.map(s => {
+      const links = (s.links || []).map(l =>
+        `<a href="${Util.esc(l.url)}" target="_blank" rel="noopener">${Util.esc(l.label)}</a>`
+      ).join("");
+      const rel = (s.paperIds || []).map(id => {
+        const p = store.data.papers.find(x => x.id === id);
+        if (!p) return "";
+        return p.url
+          ? `<span><a href="${Util.esc(p.url)}" target="_blank" rel="noopener">${Util.esc(p.title)}</a></span>`
+          : `<span>${Util.esc(p.title)}</span>`;
+      }).filter(Boolean).join("");
+      return `<li class="soft-item">
+        <div class="sname">
+          <h3>${Util.esc(s.name)}</h3>
+          ${s.lang ? `<span class="lang">${Util.esc(s.lang)}</span>` : ""}
+        </div>
+        <div class="sbody">
+          <p>${Util.esc(s.blurb)}</p>
+          <div class="links">${links}</div>
+          ${rel ? `<div class="rel"><b>From</b>${rel}</div>` : ""}
+        </div>
+      </li>`;
+    }).join("");
+  }
+}
+
+/** Talks, panels and press, each a dated line in the same shape as the
+ *  Background timelines. */
+class OutreachView {
+  constructor(el){ this.el = el; }
+
+  item(it){
+    // a paywalled link says so, so nobody follows it expecting to read it
+    const links = (it.links || []).map(l =>
+      `<span class="lk"><a href="${Util.esc(l.url)}" target="_blank" rel="noopener">${
+         Util.esc(l.label)}</a>${l.paywall ? `<span class="pw">paywall</span>` : ""}</span>`
+    ).join("");
+    const tag = [it.role, it.lang].filter(Boolean).join(" · ");
+    return `<li>
+      <div class="when">${Util.esc(it.when)}${tag
+        ? `<span class="dur">${Util.esc(tag)}</span>` : ""}</div>
+      <div>
+        <div class="what">${Util.esc(it.title)}</div>
+        <div class="org">${Util.esc(it.outlet || "")}${it.place
+          ? ` · ${Util.esc(it.place)}` : ""}${it.by ? ` · ${Util.esc(it.by)}` : ""}</div>
+        ${it.note ? `<div class="sub">${Util.esc(it.note)}</div>` : ""}
+        ${links ? `<div class="links">${links}</div>` : ""}
+      </div></li>`;
+  }
+
+  render(store){
+    const out = store.data.outreach || {};
+    const groups = (out.groups || []).filter(g => (g.items || []).length);
+    Sections.show("sec-outreach", groups.length > 0);
+    const more = document.querySelector('[data-extra="outreach"]');
+    if (more) more.innerHTML = out.moreUrl
+      ? `<a href="${Util.esc(out.moreUrl)}" target="_blank" rel="noopener">${
+           Util.esc(out.moreLabel || "more")}</a>.`
+      : "";
+    if (!groups.length){ this.el.innerHTML = ""; return; }
+
+    this.el.innerHTML = groups.map(g => `<div class="cvsub">
+      <h3>${Util.esc(g.label)}</h3>
+      <ul class="tl">${g.items.map(it => this.item(it)).join("")}</ul>
+    </div>`).join("");
+  }
+}
+
 /** Podcast episodes. The Spotify player is only fetched once the visitor asks
  *  for it, so an unopened page makes no third-party request. */
 class PodcastsView {
@@ -1114,7 +1198,9 @@ class App {
       papers: new PaperListView(document.getElementById("paper-list"), this.store),
       network: new NetworkView("#network", "#net-legend", this.store),
       chips: new ChipsView(document.querySelectorAll("[data-chips]"), this.store),
+      software: new SoftwareView(document.getElementById("soft-list")),
       tools: new ToolsView(document.getElementById("tool-grid")),
+      outreach: new OutreachView(document.getElementById("outreach-cols")),
       podcasts: new PodcastsView(document.getElementById("pod-list"), this.store),
       timeline: new TimelineView(this.store)
     };
@@ -1184,7 +1270,9 @@ class App {
     this.views.profiles.render(store);
     this.views.chips.render(store);
     this.views.papers.render(store);
+    this.views.software.render(store);
     this.views.tools.render(store);
+    this.views.outreach.render(store);
     this.views.podcasts.render(store);
     this.views.timeline.render(store);
 

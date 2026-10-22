@@ -35,7 +35,7 @@
     ],
     "alumniOf": [
       "Escuela Superior Politécnica del Litoral",
-      "Universiry of Koblenz-Landau"
+      "University of Koblenz-Landau"
     ],
     "siteUrl": "https://lisette-espin.github.io/"
   },
@@ -57,9 +57,17 @@
       "title": "Papers",
       "intro": "Grouping, sorting and filtering all act on the same set — the charts above follow along."
     },
+    "software": {
+      "title": "Open software and data",
+      "intro": "Packages and pipelines released alongside the papers. A selection —"
+    },
     "tools": {
       "title": "Interactive tools",
       "intro": "Built with the visualisation team at the Complexity Science Hub, which hosts them."
+    },
+    "outreach": {
+      "title": "Outreach",
+      "intro": "A selection of talks, panels and press coverage."
     },
     "podcasts": {
       "title": "Deep dives",
@@ -1178,6 +1186,97 @@
       "ids": "Engineering thesis · Guayaquil, Ecuador · 24 Aug 2010"
     }
   ],
+  "software": {
+    "moreUrl": "https://github.com/lisette-espin",
+    "moreLabel": "the rest is on GitHub",
+    "items": [
+      {
+        "id": "netin",
+        "name": "NetIn",
+        "blurb": "A Python package for studying inequality in social networks. It generates synthetic graphs with tunable homophily and preferential attachment, then measures how those mechanisms distribute visibility across groups. Built on NetworkX.",
+        "lang": "Python",
+        "links": [
+          {
+            "label": "PyPI",
+            "url": "https://pypi.org/project/netin"
+          },
+          {
+            "label": "Source",
+            "url": "https://github.com/CSHVienna/NetworkInequalities"
+          }
+        ],
+        "paperIds": [
+          "p1",
+          "p14",
+          "p5"
+        ]
+      },
+      {
+        "id": "llmscholarbench",
+        "name": "LLMScholarBench",
+        "blurb": "The benchmark behind the Whose Name Comes Up? audits: a harness for testing which scholars large language models put forward when asked to recommend experts, and how those answers shift with the prompt.",
+        "lang": "Python",
+        "links": [
+          {
+            "label": "Source",
+            "url": "https://github.com/CSHVienna/LLMScholarBench/"
+          },
+          {
+            "label": "Data and results",
+            "url": "https://doi.org/10.5281/zenodo.20417106"
+          }
+        ],
+        "paperIds": [
+          "p24",
+          "p8",
+          "p23"
+        ]
+      },
+      {
+        "id": "povertymaps",
+        "name": "PovertyMaps",
+        "blurb": "The pipeline for inferring high-resolution wealth maps from multimodal data — satellite imagery, mobility and connectivity — including the notebooks that produced the Sierra Leone and Uganda maps.",
+        "lang": "Python",
+        "links": [
+          {
+            "label": "Source",
+            "url": "https://github.com/lisette-espin/PovertyMaps"
+          }
+        ],
+        "paperIds": [
+          "p12",
+          "p11",
+          "x1"
+        ]
+      },
+      {
+        "id": "mrqap",
+        "name": "MRQAP",
+        "blurb": "Multiple Regression Quadratic Assignment Procedure: regression over networks held as relationship matrices, with permutation tests for significance. An R version is linked from the repository.",
+        "lang": "Python",
+        "links": [
+          {
+            "label": "Source",
+            "url": "https://github.com/lisette-espin/mrqap-python"
+          }
+        ],
+        "paperIds": []
+      },
+      {
+        "id": "pychimerge",
+        "name": "pyChiMerge",
+        "blurb": "ChiMerge, a bottom-up discretisation method that turns a numeric attribute into intervals by repeatedly merging the adjacent pair a chi-square test cannot tell apart.",
+        "lang": "Python",
+        "links": [
+          {
+            "label": "Source",
+            "url": "https://github.com/lisette-espin/pychimerge"
+          }
+        ],
+        "paperIds": []
+      }
+    ]
+  },
   "tools": [
     {
       "id": "whosenamecomesup",
@@ -1259,6 +1358,275 @@
       ]
     }
   ],
+  "outreach": {
+    "moreUrl": "https://bit.ly/LEEN-experience",
+    "moreLabel": "the full list is on my website",
+    "groups": [
+      {
+        "id": "talks",
+        "label": "Talks and panels",
+        "items": [
+          {
+            "when": "Sep 2026",
+            "title": "The Social Structure of Academic Success: Inequality in Hiring and Productivity",
+            "outlet": "Roundtable on Computational Social Science, Institute for Analytical Sociology",
+            "place": "online",
+            "role": "Invited talk",
+            "links": [
+              {
+                "label": "Slides",
+                "url": "https://bit.ly/IASCSS0926_HiringParenthood_LEspin_slides"
+              },
+              {
+                "label": "Event",
+                "url": "https://liu.se/event/international-roundtable-on-computational-social-science-2026-09-24"
+              }
+            ]
+          },
+          {
+            "when": "Nov 2025",
+            "title": "Trayectorias en Datos e Inteligencia Artificial",
+            "outlet": "phawAI + TaReCDa 2025, Universidad Católica San Pablo",
+            "place": "Arequipa, Peru",
+            "role": "Invited talk",
+            "lang": "Spanish",
+            "links": [
+              {
+                "label": "Slides",
+                "url": "https://bit.ly/LEspin_PhawAITaReCDa_2025"
+              },
+              {
+                "label": "Event",
+                "url": "https://sites.google.com/view/phaw-ai/phawai-tarecda-25"
+              }
+            ]
+          },
+          {
+            "when": "Oct 2025",
+            "title": "Responsible Decision-Making: From Network Inequality to Network Fairness",
+            "outlet": "Ethics in Complex Systems: Perspectives and Challenges, University of Zurich",
+            "place": "Zürich, Switzerland",
+            "role": "Keynote",
+            "links": [
+              {
+                "label": "Slides",
+                "url": "https://bit.ly/LEspin_EthicsInComplexity25"
+              },
+              {
+                "label": "Event",
+                "url": "https://ethics.dsi.uzh.ch/project/ethics-in-complex-systems/"
+              }
+            ]
+          },
+          {
+            "when": "May 2025",
+            "title": "AI and Society — Inequality in the Digital Age",
+            "outlet": "Computational Social Science Workshop, University of Mannheim",
+            "place": "Mannheim, Germany",
+            "role": "Panellist",
+            "links": [
+              {
+                "label": "Event",
+                "url": "https://computational-social-science.org/workshops/2025.html"
+              }
+            ]
+          },
+          {
+            "when": "Dec 2024",
+            "title": "Auditing Algorithms and Assessing their impact using (Synthetic) Network Data",
+            "outlet": "Deutsches Forschungszentrum für Künstliche Intelligenz (DFKI)",
+            "place": "Kaiserslautern, Germany",
+            "role": "Invited talk",
+            "links": [
+              {
+                "label": "Slides",
+                "url": "https://bit.ly/DFKI24-LEspin-Audits-Networks"
+              }
+            ]
+          },
+          {
+            "when": "Jul 2024",
+            "title": "AI for Inclusive and Sustainable Development",
+            "outlet": "AI for Developing Countries Forum (AIFOD), United Nations Office",
+            "place": "Vienna, Austria",
+            "role": "Panellist",
+            "links": [
+              {
+                "label": "Event",
+                "url": "https://aifod.org/"
+              }
+            ]
+          },
+          {
+            "when": "Feb 2024",
+            "title": "Poverty Map Inference and Strategic Transferability using Multimodal Data",
+            "outlet": "Partner Lightning Talk, Data for Good at Meta",
+            "place": "virtual",
+            "role": "Invited talk",
+            "links": [
+              {
+                "label": "Slides",
+                "url": "https://bit.ly/LEspin-LTD4GM24"
+              }
+            ]
+          },
+          {
+            "when": "Jul 2021",
+            "title": "Explaining and Improving Machine Learning Outcomes on Networks and Multimodal Data",
+            "outlet": "Core Data Science, Facebook",
+            "place": "virtual",
+            "role": "Invited talk",
+            "links": [
+              {
+                "label": "Slides",
+                "url": "https://bit.ly/talk-FBCDS21"
+              }
+            ]
+          },
+          {
+            "when": "Oct 2020",
+            "title": "Estructura de Redes y su Influencia en Machine Learning",
+            "outlet": "WiDS, ESPOL",
+            "place": "virtual",
+            "role": "Invited talk",
+            "lang": "Spanish",
+            "links": [
+              {
+                "label": "Slides",
+                "url": "https://bit.ly/LEEN-WiDS2020"
+              },
+              {
+                "label": "Event",
+                "url": "https://wids.espol.edu.ec/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "media",
+        "label": "In the media",
+        "items": [
+          {
+            "when": "Jul 2026",
+            "title": "Sozusagen ein bisschen ein Problem",
+            "outlet": "Die Presse",
+            "by": "Karin Lehner",
+            "lang": "German",
+            "links": [
+              {
+                "label": "Article",
+                "url": "https://www.diepresse.com/33774036/sozusagen-ein-bisschen-ein-problem",
+                "paywall": true
+              }
+            ]
+          },
+          {
+            "when": "Sep 2025",
+            "title": "Can LLMs understand scientists?",
+            "outlet": "Computer Weekly",
+            "by": "Will Grimond",
+            "links": [
+              {
+                "label": "Article",
+                "url": "https://www.computerweekly.com/feature/Can-LLMs-understand-scientists"
+              }
+            ]
+          },
+          {
+            "when": "May 2025",
+            "title": "Spotlight On: Lisette Espín-Noboa",
+            "outlet": "Complexity Science Hub",
+            "links": [
+              {
+                "label": "Article",
+                "url": "https://csh.ac.at/news/spotlight-on-lisette-espin-noboa"
+              }
+            ]
+          },
+          {
+            "when": "Sep 2024",
+            "title": "Alles eine Frage der Fairness",
+            "outlet": "KURIER",
+            "lang": "German",
+            "note": "On how AI-based models can help fight poverty, and why algorithms have to be fairer.",
+            "links": [
+              {
+                "label": "Article",
+                "url": "https://kurier.at/wien-wills-wissen/alles-eine-frage-der-fairness/402957252"
+              }
+            ]
+          },
+          {
+            "when": "Sep 2023",
+            "title": "Ihre Modelle visualisieren zukünftige Armut auf Landkarten",
+            "outlet": "Brutkasten",
+            "lang": "German",
+            "links": [
+              {
+                "label": "Article",
+                "url": "https://brutkasten.com/artikel/ihre-modelle-visualisieren-zukuenftige-armut-auf-landkarten"
+              }
+            ]
+          },
+          {
+            "when": "Jul 2023",
+            "title": "Weniger weiße Flecken: Genaue Karten zur Armut auf Basis von Big Data",
+            "outlet": "Die Presse & Austria Presse Agentur",
+            "lang": "German",
+            "links": [
+              {
+                "label": "Die Presse",
+                "url": "https://www.diepresse.com/13447161/weniger-weisse-flecken-genaue-karten-zur-armut-auf-basis-von-big-data"
+              },
+              {
+                "label": "APA",
+                "url": "https://science.apa.at/power-search/2688601196449326729"
+              }
+            ]
+          },
+          {
+            "when": "May 2023",
+            "title": "Scientists create high-resolution poverty maps using big data",
+            "outlet": "Complexity Science Hub",
+            "links": [
+              {
+                "label": "CSH",
+                "url": "https://csh.ac.at/news/scientists-create-high-resolution-poverty-maps-using-big-data"
+              },
+              {
+                "label": "Phys.org",
+                "url": "https://phys.org/news/2023-05-scientists-high-resolution-poverty-big.html"
+              }
+            ]
+          },
+          {
+            "when": "Feb 2022",
+            "title": "Ranking algorithms can reinforce inequalities in social networks",
+            "outlet": "Complexity Science Hub",
+            "links": [
+              {
+                "label": "Article",
+                "url": "https://csh.ac.at/news/ranking-algorithms-can-reinforce-inequalities-in-social-networks"
+              }
+            ]
+          },
+          {
+            "when": "May 2010",
+            "title": "Desarrolló en las aulas un software y empresa propia",
+            "outlet": "El Universo",
+            "lang": "Spanish",
+            "links": [
+              {
+                "label": "Article",
+                "url": "https://www.eluniverso.com/2010/05/24/1/1356/desarrollo-aulas-un-software-empresa-propia.html"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "podcasts": [
     {
       "id": "wnc1",

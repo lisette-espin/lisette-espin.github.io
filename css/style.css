@@ -210,6 +210,38 @@ input[type=checkbox]{width:1rem;height:1rem;accent-color:var(--ink)}
 .pod .frame iframe{border:none;border-radius:12px;width:100%;display:block}
 .pod .frame .go{font-size:.8rem;line-height:1.4}
 
+/* OPEN SOFTWARE AND DATA -------------------------------------------------- */
+.soft{list-style:none;margin:0;padding:0}
+.soft-item{display:grid;grid-template-columns:11rem 1fr;gap:var(--s3);
+  padding:var(--s3) 0;border-bottom:1px solid var(--rule)}
+.soft-item:first-child{padding-top:0}
+.soft-item:last-child{border-bottom:none}
+.soft-item .sname h3{font-size:1.02rem;line-height:1.2}
+.soft-item .lang{display:inline-block;margin-top:.25rem;font-size:.7rem;
+  text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+.soft-item .sbody{min-width:0;display:flex;flex-direction:column;gap:.5rem}
+.soft-item p{margin:0;font-size:.86rem;color:var(--ink-soft);line-height:1.5;max-width:68ch}
+.soft-item .rel{font-size:.76rem;color:var(--ink-soft);border-top:1px solid var(--rule);
+  padding-top:.45rem}
+.soft-item .rel b{font-weight:500;color:var(--ink);display:block;font-size:.7rem;
+  text-transform:uppercase;letter-spacing:.04em;margin-bottom:.15rem}
+.soft-item .rel span{display:block;margin-bottom:.15rem}
+.soft-item .rel a{color:var(--ink-soft);border-bottom:1px solid var(--rule)}
+.soft-item .rel a:hover{color:var(--c-journal);border-bottom-color:var(--c-journal)}
+@media(max-width:560px){.soft-item{grid-template-columns:1fr;gap:.5rem}}
+
+/* a row of small links, shared by software entries and outreach items */
+.links{display:flex;flex-wrap:wrap;gap:.2rem .9rem;font-size:.8rem}
+.links a{white-space:nowrap}
+.tl .links{margin-top:.25rem}
+
+/* OUTREACH ---------------------------------------------------------------- */
+#outreach-cols .tl li{grid-template-columns:7rem 1fr}
+.links .lk{display:inline-flex;align-items:baseline;gap:.3rem;white-space:nowrap}
+.links .pw{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--ink-soft);border:1px solid var(--rule-strong);padding:0 .25rem;line-height:1.4}
+@media(max-width:520px){#outreach-cols .tl li{grid-template-columns:1fr}}
+
 /* TOOLS ------------------------------------------------------------------- */
 .tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--s3)}
 .tool{background:var(--panel);border:1px solid var(--rule);display:flex;flex-direction:column}

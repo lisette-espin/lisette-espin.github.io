@@ -73,10 +73,14 @@ The one exception is the block between the `STATIC META` markers in the head.
 Link-preview scrapers — LinkedIn, Slack, X, Bluesky, WhatsApp — fetch the file
 and read it without running any JavaScript, so they would otherwise see an
 empty title. That block is a static copy of the seven tags they look at. It is
-generated, not hand-written: `build.py` regenerates it on every run, from `meta`
-in `content.json`, so the two can never disagree. It rewrites only what sits
-between the markers, and says so when there was nothing to change. There is no
-need to run `sync_meta.py` yourself.
+generated, not hand-written:
+
+    python3 sync_meta.py
+
+Run that after editing `meta` in the data file and the two can never disagree.
+The script rewrites only what sits between the markers, and says so when there
+was nothing to change. Forgetting to run it costs you a stale preview card and
+nothing else — the browser still takes everything from the data file.
 
 ## Running it
 
@@ -130,6 +134,36 @@ One object per work:
 ### `tools`
 Interactive tools: `name`, `url`, `blurb`, `image`, and `paperIds` linking
 back to entries in `papers`. Leave the list empty and the section disappears.
+
+### `software`
+Released packages and datasets. `moreUrl` and `moreLabel` become the link at
+the end of the section intro; `items` is the list, each with:
+
+    id        short key, for your own reference
+    name      display name
+    blurb     a sentence or two on what it does
+    lang      language label shown under the name
+    links     [{label, url}, …] — PyPI, Source, Data and results, …
+    paperIds  entries in `papers`, shown as "From"
+
+### `outreach`
+Talks, panels and press. `moreUrl` / `moreLabel` work as above. `groups` is a
+list of columns, each `{id, label, items}`; an item is:
+
+    when      "Jul 2026" — shown on the left
+    title     what it was called
+    outlet    venue, publication or institution
+    place     optional; city, or "online"
+    role      optional; "Keynote", "Panellist", "Invited talk", "Guest"
+    by        optional; the journalist's name
+    lang      optional; shown when it is not in English
+    note      optional; one line of context
+    links     [{label, url}, …] — add {"label":"Video","url":"…"} to a talk
+              and the link appears under it. Add "paywall": true to a link
+              and it is tagged, so nobody follows it expecting to read it
+
+Items are not sorted for you — they appear in the order you write them.
+Remove a group, or the whole block, and that part of the section disappears.
 
 ### `podcasts` and `podcastShow`
 One entry per episode: `id`, `title`, `blurb`, `url`, `spotifyId` (the id in the
