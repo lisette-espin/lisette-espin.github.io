@@ -80,7 +80,10 @@ class Store {
       if (!Array.isArray(p.affils)) p.affils = p.affil ? String(p.affil).split(/\s*\/\s*/) : [];
     });
     this.filters = { year:null, topic:null, authors:[], cat:null, text:"", hideUnpub:false };
-    this.view = { groupBy:"year", sortBy:"cites-desc",
+    // The list opens ungrouped and most-cited first: the charts above already
+    // tell the year-by-year story, so the list's job is to lead with the work
+    // that landed. Grouping by year is one choice away in the controls.
+    this.view = { groupBy:"none", sortBy:"cites-desc",
                   netMode:"ego", netMin:1 };
     this.emit();
   }

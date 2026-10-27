@@ -183,6 +183,11 @@ window.DASHBOARD =
       },
       {
         "group": "Academic",
+        "name": "alphaXiv",
+        "url": "https://www.alphaxiv.org/@lisette-espin-noboa"
+      },
+      {
+        "group": "Academic",
         "name": "GitHub",
         "url": "https://github.com/lisette-espin"
       },
@@ -441,10 +446,10 @@ window.DASHBOARD =
       "M": "Men",
       "U": "Not recorded"
     },
-    "citationsTotal": 410,
+    "citationsTotal": 411,
     "hIndex": 10,
     "i10Index": 11,
-    "asOf": "22 October 2026"
+    "asOf": "27 October 2026"
   },
   "papers": [
     {
@@ -845,10 +850,10 @@ window.DASHBOARD =
       ],
       "url": "https://arxiv.org/abs/2506.00074",
       "ids": "arXiv:2506.00074",
-      "citations": 8,
+      "citations": 9,
       "citationsByYear": {
         "2025": 2,
-        "2026": 6
+        "2026": 7
       }
     },
     {
@@ -1725,8 +1730,7 @@ window.DASHBOARD =
             "links": [
               {
                 "label": "Article",
-                "url": "https://www.diepresse.com/33774036/sozusagen-ein-bisschen-ein-problem",
-                "paywall": true
+                "url": "https://www.diepresse.com/33774036/sozusagen-ein-bisschen-ein-problem"
               }
             ]
           },
@@ -1750,6 +1754,26 @@ window.DASHBOARD =
               {
                 "label": "Article",
                 "url": "https://csh.ac.at/news/spotlight-on-lisette-espin-noboa"
+              }
+            ]
+          },
+          {
+            "when": "Dec 2024",
+            "title": "Parenthood in Academia",
+            "outlet": "Diversity in Research Podcast",
+            "role": "Interview",
+            "links": [
+              {
+                "label": "About the episode",
+                "url": "https://diversityinresearch.buzzsprout.com/1026718/episodes/16200216-motherhood-in-academia-a-conversation-with-lisette-espin-noboa"
+              },
+              {
+                "label": "Spotify",
+                "url": "https://open.spotify.com/show/4bavAzAo5Geu51Z7E3KAs1"
+              },
+              {
+                "label": "Apple Podcasts",
+                "url": "https://podcasts.apple.com/gb/podcast/diversity-in-research-podcast/id1520007044"
               }
             ]
           },
@@ -1874,7 +1898,7 @@ window.DASHBOARD =
     "2023": 54,
     "2024": 53,
     "2025": 52,
-    "2026": 81,
+    "2026": 82,
     "2027": 1
   }
 };

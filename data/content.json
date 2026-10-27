@@ -173,6 +173,11 @@
       },
       {
         "group": "Academic",
+        "name": "alphaXiv",
+        "url": "https://www.alphaxiv.org/@lisette-espin-noboa"
+      },
+      {
+        "group": "Academic",
         "name": "GitHub",
         "url": "https://github.com/lisette-espin"
       },
@@ -1516,8 +1521,7 @@
             "links": [
               {
                 "label": "Article",
-                "url": "https://www.diepresse.com/33774036/sozusagen-ein-bisschen-ein-problem",
-                "paywall": true
+                "url": "https://www.diepresse.com/33774036/sozusagen-ein-bisschen-ein-problem"
               }
             ]
           },
@@ -1541,6 +1545,26 @@
               {
                 "label": "Article",
                 "url": "https://csh.ac.at/news/spotlight-on-lisette-espin-noboa"
+              }
+            ]
+          },
+          {
+            "when": "Dec 2024",
+            "title": "Parenthood in Academia",
+            "outlet": "Diversity in Research Podcast",
+            "role": "Interview",
+            "links": [
+              {
+                "label": "About the episode",
+                "url": "https://diversityinresearch.buzzsprout.com/1026718/episodes/16200216-motherhood-in-academia-a-conversation-with-lisette-espin-noboa"
+              },
+              {
+                "label": "Spotify",
+                "url": "https://open.spotify.com/show/4bavAzAo5Geu51Z7E3KAs1"
+              },
+              {
+                "label": "Apple Podcasts",
+                "url": "https://podcasts.apple.com/gb/podcast/diversity-in-research-podcast/id1520007044"
               }
             ]
           },
