@@ -446,10 +446,10 @@ window.DASHBOARD =
       "M": "Men",
       "U": "Not recorded"
     },
-    "citationsTotal": 414,
+    "citationsTotal": 415,
     "hIndex": 10,
     "i10Index": 12,
-    "asOf": "6 November 2026"
+    "asOf": "8 November 2026"
   },
   "papers": [
     {
@@ -1042,13 +1042,13 @@ window.DASHBOARD =
       ],
       "url": "https://doi.org/10.1145/3501247.3531583",
       "ids": "WebSci '22 pp. 228–238 · 26 Jun 2022",
-      "citations": 55,
+      "citations": 56,
       "citationsByYear": {
         "2022": 3,
         "2023": 16,
         "2024": 14,
         "2025": 9,
-        "2026": 13
+        "2026": 14
       }
     },
     {
@@ -1898,7 +1898,7 @@ window.DASHBOARD =
     "2023": 54,
     "2024": 53,
     "2025": 53,
-    "2026": 84,
+    "2026": 85,
     "2027": 1
   }
 };
